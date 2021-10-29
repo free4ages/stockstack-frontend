@@ -158,7 +158,6 @@ export const TopMenu = ({
   return (
     <AppBar position="fixed" className={className}>
       <Toolbar className={clsx(classes.toolbar)}>
-        {menu}
         <Typography>JARR</Typography>
         <div>
           <Tooltip title="Settings">

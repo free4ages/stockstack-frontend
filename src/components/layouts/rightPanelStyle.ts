@@ -7,13 +7,15 @@ export default makeStyles((theme: Theme) =>
   createStyles({
     editPanel: {
       maxWidth: editPanelWidth,
+      width: editPanelWidth,
       [theme.breakpoints.down("sm")]: {
         width: "auto"
       },
       flexShrink: 0,
     },
     editPanelPaper: {
-      overflow: "hidden",
+      //overflow: "hidden",
+      background: "#fafafa",
       width: editPanelWidth,
       [theme.breakpoints.down("sm")]: {
         width: "100%"

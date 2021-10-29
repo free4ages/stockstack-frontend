@@ -8,6 +8,8 @@ import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 // icons
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -35,7 +37,7 @@ export const LeftPanel = ({
   const [displaySearch, setDisplaySearch] = useState(false);
 
   let searchBar;
-  if (displaySearch) {
+  //if (displaySearch) {
     searchBar = (
       <div className={classes.drawerHeader}>
         <InputBase placeholder="Search feed…" autoFocus
@@ -45,7 +47,7 @@ export const LeftPanel = ({
         </IconButton>
       </div>
     );
-  }
+  //}
 
 
   const addFeedButton = (
@@ -59,7 +61,7 @@ export const LeftPanel = ({
     </IconButton>);
   return (
     <Drawer
-      variant="persistent"
+      variant="permanent"
       anchor="left"
       open={isOpen}
       className={classes.drawer}
@@ -67,7 +69,7 @@ export const LeftPanel = ({
         paper: classes.drawerPaper,
       }}
     >
-      <div className={classes.drawerHeader}>
+      {/*<div className={classes.drawerHeader}>
         <div>
           <Tooltip title="Add new feed">{addFeedButton}</Tooltip>
           <Tooltip title="Add new category">{addCategoryButton}</Tooltip>
@@ -93,9 +95,14 @@ export const LeftPanel = ({
           </Tooltip>
         </div>
       </div>
-      {displaySearch ? <Divider /> : null }
-      {searchBar}
+      {displaySearch ? <Divider /> : null } */}
+      {/*{searchBar}*/}
       <Divider />
+      <Tabs value={0} variant="fullWidth">
+        <Tab label="Schedule" classes={{root:classes.tab}}/>
+        <Tab label="Pinned" classes={{root:classes.tab}}/>
+        <Tab icon={<SearchIcon/>} aria-label="Item Three" classes={{root:classes.tabSearch}}/>
+      </Tabs>
       {/*{list}*/}
     </Drawer>
   );

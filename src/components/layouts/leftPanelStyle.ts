@@ -13,6 +13,7 @@ export default makeStyles((theme: Theme) =>
     },
     drawerPaper: {
       width: feedListWidth,
+      paddingTop: 64,
       [theme.breakpoints.down("sm")]: {
         width: "100%"
       },
@@ -28,6 +29,15 @@ export default makeStyles((theme: Theme) =>
     category: {
       paddingTop: 2,
       paddingBottom: 2,
+    },
+    tab:{
+      minWidth: 125,
+      borderRight:"1px solid black",
+      borderBottom:"1px solid black" 
+    },
+    tabSearch:{
+      minWidth: 50,
+      borderBottom:"1px solid black" 
     },
     catItem: {
       paddingLeft: 30,

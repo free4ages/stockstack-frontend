@@ -9,9 +9,10 @@ export default makeStyles((theme: Theme) =>
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
+      zIndex: theme.zIndex.drawer + 1,
     },
     appBarShift: {
-      width: `calc(100% - ${feedListWidth}px)`,
+      width: `100%`,
       marginLeft: feedListWidth,
       transition: theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.easeOut,
