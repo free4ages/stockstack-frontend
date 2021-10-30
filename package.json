@@ -22,6 +22,7 @@
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
     "react-toastify": "^8.0.3",
+    "react-window": "^1.8.6",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
@@ -48,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-window": "^1.8.5"
   }
 }
