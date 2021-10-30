@@ -1,7 +1,7 @@
-import DefaultLayout from './DefaultLayout';
+import ThreeColumnLayout from './threeColumnLayout';
 
 const layouts={
-  DefaultLayout,
+  ThreeColumnLayout,
 };
 
 export default layouts;

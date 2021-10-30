@@ -25,7 +25,7 @@ const routes = [
     route: "/user-news",
     routeProps: { exact: true },
     props: {},
-    layout:layouts.DefaultLayout,
+    layout:layouts.ThreeColumnLayout,
     isProtected: true,
   },
 ]
