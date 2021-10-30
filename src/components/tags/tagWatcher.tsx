@@ -10,6 +10,8 @@ import Divider from "@material-ui/core/Divider";
 import SearchIcon from "@material-ui/icons/Search";
 
 import SubscribedTagList from './subscribedTagList';
+import PinnedTagList from './pinnedTagList';
+import SearchTag from './searchTag';
 
 const useStyles = makeStyles((theme: Theme) =>({
   tab:{
@@ -49,6 +51,10 @@ const TagWatcher = ()=>{
       setDisplaySearch(true);
     }
   }
+  const handleSearchClose = (value:any) => {
+    setDisplaySearch(false);
+    setSelectedTab(value || 0);
+  }
   return (
     <>
       <Tabs value={selectedTab} variant="fullWidth" className={clsx({[classes.hide]:displaySearch})} onChange={handleChange}>
@@ -57,7 +63,15 @@ const TagWatcher = ()=>{
         <Tab icon={<SearchIcon/>} aria-label="Item Three" classes={{root:classes.tabSearch}}/>
       </Tabs>
       <Divider />
-      <SubscribedTagList />
+      {selectedTab === 0 &&
+        <SubscribedTagList />
+      }
+      {selectedTab === 1 &&
+        <PinnedTagList />
+      }
+      {selectedTab === 2 &&
+        <SearchTag exitSearch={handleSearchClose} />
+      }
     </>
   );
 };

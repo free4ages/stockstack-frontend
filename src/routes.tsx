@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from "react-router-dom";
 import AuthAPI from "./services/auth";
 import {LoginPage} from "./pages/login";
-import {UserNewsPage} from "./pages/news";
+import {FeedPage} from "./pages/feed";
 import layouts from 'components/layouts';
 const routes = [
   {
@@ -21,8 +21,8 @@ const routes = [
     props: {},
   },
   {
-    component: UserNewsPage,
-    route: "/user-news",
+    component: FeedPage,
+    route: "/feed",
     routeProps: { exact: true },
     props: {},
     layout:layouts.ThreeColumnLayout,

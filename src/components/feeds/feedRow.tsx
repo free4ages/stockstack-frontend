@@ -1,66 +1,19 @@
-import React,{useState} from 'react';
+import React from 'react';
 import clsx from "clsx";
-// material components
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import SearchBar from "material-ui-search-bar";
-import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import AppBar from "@material-ui/core/AppBar";
+import { makeStyles, Theme } from "@material-ui/core/styles";
+
 import Chip from "@material-ui/core/Chip";
 import Paper from '@material-ui/core/Paper';
-import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import InputBase from "@material-ui/core/InputBase";
 
-import SettingsIcon from "@material-ui/icons/Settings";
-import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
+import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
-import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@material-ui/icons/RadioButtonUncheckedOutlined';
-import SearchIcon from "@material-ui/icons/Search";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import FilterAllIcon from "@material-ui/icons/IndeterminateCheckBox";
-import Close from "@material-ui/icons/Close";
-import MarkAllAsReadIcon from "@material-ui/icons/LibraryAddCheck";
-import FilterFavoriteIcon from "@material-ui/icons/Star";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
+
+
 const useStyles = makeStyles((theme:Theme) => ({
-  toolbar: {
-    justifyContent: "space-between",
-  },
-  logoutButton: {
-    marginRight: -15
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: "space-between",
-  },
-  articleContainer:{
-    overflowY:'scroll',
-    height:'calc(100vh - 144px - 15px)',
-    paddingLeft:24,
-    paddingRight:24,
-    marginTop:5
-  },
-  articleContainerShifted:{
-    height:'calc(100vh - 144px - 15px - 48px)',
-  },
-  filterBar:{
-    paddingLeft:24,
-    paddingRight:24
-  }
-}));
-const articleStyles = makeStyles((theme:Theme) => ({
   root: {
     overflow: 'hidden',
     border:'1px solid #dfe1e5',
@@ -130,8 +83,8 @@ const articleStyles = makeStyles((theme:Theme) => ({
   }
 }));
 
-const Article = () => {
-  const classes = articleStyles();
+const FeedRow = () => {
+  const classes = useStyles();
   return (
     <Paper elevation={0} className={classes.root}>
       <div>
@@ -179,61 +132,6 @@ const Article = () => {
       </div>
     </Paper>
   )
-}
-
-
-const UserNewsPage = () => {
-  const classes = useStyles();
-  const [searchOpen,setSearchOpen] = useState(false);
-  return (
-  <>
-      <div className={classes.filterBar}>
-      <Toolbar className={clsx(classes.toolbar)}>
-        <Typography>JARR</Typography>
-        <div>
-          <Tooltip title="Show All">
-            <IconButton onClick={()=>{}}>
-              <FilterAllIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Show All">
-            <IconButton onClick={()=>{}}>
-              <FilterFavoriteIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Mark All As Read">
-            <IconButton  onClick={()=>{}}>
-              <MarkAllAsReadIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Mark All As Read">
-            <IconButton color="inherit" onClick={()=>{setSearchOpen(!searchOpen)}}>
-              <SearchIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Hide feed list">
-            <IconButton onClick={()=>{}}>
-              <ChevronRightIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-      </Toolbar>
-      {searchOpen && (
-        <SearchBar />
-      )}
-    </div>
-    <div className={clsx(classes.articleContainer,{[classes.articleContainerShifted]:searchOpen})}>
-      <Article />
-      <Article />
-      <Article />
-      <Article />
-      <Article />
-      <Article />
-    </div>
-    </>
-  )
-
 };
 
-export default UserNewsPage;
-
+export default FeedRow;

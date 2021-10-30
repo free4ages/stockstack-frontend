@@ -4,6 +4,7 @@ import Close from "@material-ui/icons/Close";
 
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
+import Divider from "@material-ui/core/Divider";
 const useStyles = makeStyles((theme: Theme) =>({
   drawerHeader: {
     display: "flex",
@@ -15,15 +16,19 @@ const useStyles = makeStyles((theme: Theme) =>({
   }
 }));
 
-const SearchTag = () => {
+const SearchTag = ({
+  exitSearch,
+}:any) => {
   const classes = useStyles();
   return (
     <div className={classes.drawerHeader}>
       <InputBase placeholder="Search feed…" autoFocus
         onChange={(e) => console.log(e.target.value)} />
-      <IconButton onClick={() => {} }>
+      <IconButton onClick={() => exitSearch() }>
         <Close />
       </IconButton>
     </div>
   );
 };
+
+export default SearchTag;
