@@ -16,7 +16,7 @@ const BackendAPI = {
         url = 'http://localhost';
         break;
       default:
-        url = 'http://localhost';
+        url = 'http://localhost:3000/v1';
         break;
     }
     //EnvironmentService.setEnv(env);

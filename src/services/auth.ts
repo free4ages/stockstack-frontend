@@ -28,7 +28,7 @@ let currentUser: IUserDocument | null = {
   email:"rohitanand.iitkgp@gmail.com",
   name:"Rohit Anand",
   role:UserRole.SUPERADMIN,
-  _id:"ansnfdgh574895734",
+  id:"ansnfdgh574895734",
   permissions:[],
   createdAt:"",
   updatedAt:"",

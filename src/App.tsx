@@ -9,12 +9,16 @@ import { ThemeProvider } from "@material-ui/styles";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {defaultTheme} from './theme';
+import BackendAPI from './services';
+
 
 
 import routes from "./routes";
 import AuthAPI from "./services/auth";
 
 const history = createBrowserHistory();
+
+BackendAPI.setENV('dev');
 
 
 function App() {

@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import useStyles from "./threeColumnLayoutStyle";
 import {TogglePanelButton} from './togglePanelButton';
-import {TagWatcher} from '../tags';
+import {TagWatch} from 'features/tagwatch';
 
 import {TopMenu} from './topMenu';
 import {RightPanel} from "./rightPanel";
@@ -21,7 +21,7 @@ const ThreeColumnLayout = ({
       <CssBaseline />
       <TopMenu />
       <LeftPanel>
-        <TagWatcher />
+        <TagWatch />
       </LeftPanel>
       <main className={classes.appContent}>
         <TogglePanelButton isOpen={leftIsOpen} position={"left"} setIsOpen={setLeftIsOpen} />

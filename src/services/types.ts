@@ -21,16 +21,23 @@ export type TUpdateResource<Resource> = (
 
 export interface IListParams {
   page?: number;
+  sortBy?: string;
+  limit?: number;
   populate?: boolean;
-  max?: number;
   q?: string;
-  sort?: string;
   all?: boolean;
-  isRecent?: boolean;
+}
+
+export interface IListResponse<T> {
+  results: T[];
+  page?: number;
+  limit?: number;
+  totalPages?: number;
+  totalResults?: number
 }
 
 export interface IDocument {
-  _id: ObjectId;
+  id: ObjectId;
   createdAt: string;
   updatedAt: string;
   __v: string;
@@ -66,3 +73,4 @@ export interface PageTemplate {
   body?: string | ArrayBody[];
   title?: string;
 }
+

@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createTheme } from "@material-ui/core/styles";
 
 export const ssColors = {
   primary : {
@@ -19,7 +19,7 @@ export const ssColors = {
   },
 }
 
-export const loginTheme = createMuiTheme({
+export const loginTheme = createTheme({
   palette: {
     primary: ssColors.primary,
     secondary: ssColors.secondary,
@@ -27,7 +27,7 @@ export const loginTheme = createMuiTheme({
   }
 });
 
-export const defaultTheme = createMuiTheme({
+export const defaultTheme = createTheme({
   palette: {
     primary: ssColors.primary,
     secondary: ssColors.secondary,

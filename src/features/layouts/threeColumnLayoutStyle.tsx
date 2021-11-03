@@ -5,7 +5,7 @@ export default makeStyles((theme:Theme) => ({
     display: "flex",
   },
   appContent: {
-    //flex: "1 1 100%", // https://github.com/philipwalton/flexbugs#flexbug-17
+    flex: "1 1 100%", // https://github.com/philipwalton/flexbugs#flexbug-17
     maxWidth: "100%", // https://github.com/philipwalton/flexbugs#flexbug-17
     position:'relative',
     paddingTop: 80, // equal to AppBar height + 16px

@@ -1,7 +1,9 @@
 import React,{useState} from 'react';
+import { ConnectedProps,connect } from 'react-redux'
+import {RootState} from 'app/store';
 import clsx from "clsx";
-// material components
 import { makeStyles, Theme } from "@material-ui/core/styles";
+
 import {FeedList} from 'components/feeds';
 import SearchBar from "material-ui-search-bar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -36,11 +38,28 @@ const useStyles = makeStyles((theme:Theme) => ({
   }
 }));
 
-const FeedPage = () => {
+interface OwnProps{
+  searchOpen: boolean;
+  setSearchOpen : (v:boolean) => void
+}
+
+const mapState = (state: RootState) => ({
+});
+
+const mapDispatch = {
+
+};
+
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & OwnProps;
+
+const ArticleListFilter = ({
+  searchOpen,
+  setSearchOpen
+}:Props) => {
   const classes = useStyles();
-  const [searchOpen,setSearchOpen] = useState(false);
   return (
-  <>
       <div className={classes.filterBar}>
       <Toolbar className={clsx(classes.toolbar)}>
         <Typography>JARR</Typography>
@@ -76,10 +95,8 @@ const FeedPage = () => {
         <SearchBar />
       )}
     </div>
-    <FeedList searchOpen={searchOpen}/>
-    </>
-  )
+  );
 };
 
-export default FeedPage;
+export default connector(ArticleListFilter);
 

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import React, {useEffect,useState} from 'react';
+import { ConnectedProps,connect } from 'react-redux'
+import {RootState,AppDispatch} from 'app/store';
 
 import ListItem from "@material-ui/core/ListItem";
 import Badge from "@material-ui/core/Badge";
@@ -9,61 +10,29 @@ import IconButton from "@material-ui/core/IconButton";
 
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 
-const useStyles = makeStyles((theme: Theme) =>({
-  feedIcon: {
-    maxWidth: 16,
-    maxHeight: 16,
-    margin: "8px 5px 8px 20px",
-    width: "100%",
-    height: "auto",
-  },
-  feedItem: {
-    lineHeight: 1,
-    overflow: "hidden",
-    paddingLeft: "35px !important",
-    whiteSpace: "nowrap",
-    [theme.breakpoints.down("sm")]: {
-      paddingRight: 14,
-      paddingLeft: "40px !important",
-    }
-  },
-  feedItemText: {
-    marginRight: 10,
-    [theme.breakpoints.down("sm")]: {
-      marginRight: 25,
-    },
-    "& span" : {
-      maxWidth: "100%",
-      overflow: "hidden",
-    }
-  },
-  feedItemToolBar:{
-    position:'absolute',
-    right:0,
-    top:0,
-    marginRight:40,
-    '& .MuiIconButton-root:hover':{
-      backgroundColor:'inherit'
-    }
-  },
-  feedBadge: {
-    opacity: 0.6,
-    right: 2
-  },
-  feed: {
-    paddingTop: 2,
-    paddingBottom: 2,
-  },
-}));
+import useStyles from './tagRowStyle';
 
-const TagRow = ({index,style}:any) => {
-  console.log(index,style);
+interface OwnProps{
+}
+const mapState = (state: RootState) => ({
+});
+
+const mapDispatch = (dispatch:AppDispatch) => ({
+});
+
+const connector = connect(mapState, mapDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & OwnProps;
+
+const PinnedTagRow = ({
+
+}:Props) => {
   const classes = useStyles();
   const [toolOpen,setToolOpen] = useState(false); 
   return (
     <ListItem button
-      key={`f${index}`}
-      style={style}
+      //key={`f${index}`}
+      //style={style}
       className={classes.feedItem}
       selected={false}
       onClick={(e) => {}}
@@ -84,5 +53,4 @@ const TagRow = ({index,style}:any) => {
     </ListItem>
   );
 };
-
-export default TagRow;
+export default connector(PinnedTagRow);
