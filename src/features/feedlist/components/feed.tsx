@@ -147,7 +147,7 @@ const Feed = ({
           {(feed.tags && feed.tags.length)? (
           <div className={classes.tagChips}>
             {feed.tags.slice(0,3).map(tag=>(
-              <Chip classes={{root:classes.chipRoot}} variant="outlined" size="small" label={tag} />
+              <Chip key={tag} classes={{root:classes.chipRoot}} variant="outlined" size="small" label={tag} />
             ))}
             {feed.tags.length>3 && 
               <div className={classes.chipRoot}>

@@ -4,7 +4,6 @@ import {RootState} from 'app/store';
 import clsx from "clsx";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 
-import {FeedList} from 'components/feeds';
 import SearchBar from "material-ui-search-bar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";

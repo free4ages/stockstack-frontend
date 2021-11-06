@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect } from "react-router-dom";
 import AuthAPI from "./services/auth";
-import {LoginPage} from "./pages/login";
 import {ArticleList} from './features/articlelist';
 import {FeedList} from './features/feedlist';
 import {Auth} from './features/auth';

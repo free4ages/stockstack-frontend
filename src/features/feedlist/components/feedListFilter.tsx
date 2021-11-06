@@ -4,13 +4,11 @@ import {RootState,AppDispatch} from 'app/store';
 import clsx from "clsx";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 
-import {FeedList} from 'components/feeds';
 import SearchBar from "material-ui-search-bar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputAdornment from '@material-ui/core/InputAdornment';
 
 import SearchIcon from "@material-ui/icons/Search";
 import FilterAllIcon from "@material-ui/icons/IndeterminateCheckBox";
@@ -149,11 +147,7 @@ const FeedListFilter = ({
         </div>
       </Toolbar>
       {searchOpen && (
-        <SearchBar 
-          InputProps={{
-            startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
-          }}
-        />
+        <SearchBar/>
       )}
     </div>
   );
