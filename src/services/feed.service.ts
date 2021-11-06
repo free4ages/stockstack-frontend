@@ -4,6 +4,16 @@ export interface IMarkParams{
   userFeedId: string;
   value: boolean;
 };
+
+export interface IFeedListParams extends IListParams{
+ readLater ?: boolean;
+ recommended ?: boolean;
+ isRead ?: boolean;
+ important ?: boolean;
+ deleted ?: boolean;
+ tagNames ?: string | string[];
+}
+
 export interface IFeedDocument extends IDocument{
   title: string;
   shortText?: string;
@@ -21,7 +31,7 @@ export interface IFeedDocument extends IDocument{
   isRead?: boolean;
 };
 
-const list = (params:IListParams)=>{
+const list = (params:IFeedListParams)=>{
   return client.get<IListResponse<IFeedDocument>>('/user-feeds',{params});
 };
 

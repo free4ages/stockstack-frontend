@@ -29,7 +29,8 @@ const SubscribedTagList = ({
     fetchTags();
   },[fetchTags])
   return (
-    <FixedSizeList height={1000} width={299} itemCount={itemsCount} itemSize={34}>
+    //extra count for taking All tag
+    <FixedSizeList height={1000} width={299} itemCount={itemsCount+1} itemSize={34}>
       {SubscribedTagRow}
     </FixedSizeList>
   )

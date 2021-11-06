@@ -131,7 +131,6 @@ const Feed = ({
 }:Props) => {
   console.log("Rendering feed");
   const classes = useStyles();
-  console.log(feed.link);
   return (
     <Paper elevation={0} className={clsx(classes.root,{[classes.paperRead]:feed.isRead})}>
       <div>
@@ -147,12 +146,14 @@ const Feed = ({
           </div>
           {(feed.tags && feed.tags.length)? (
           <div className={classes.tagChips}>
-            <Chip classes={{root:classes.chipRoot}} variant="outlined" size="small" label="tatapower" />
-            <Chip classes={{root:classes.chipRoot}} variant="outlined" size="small" label="ongc" />
-            <Chip classes={{root:classes.chipRoot}} variant="outlined" size="small" label="iex" />
-            <div className={classes.chipRoot}>
-              <span>+2 more</span>
-            </div>
+            {feed.tags.slice(0,3).map(tag=>(
+              <Chip classes={{root:classes.chipRoot}} variant="outlined" size="small" label={tag} />
+            ))}
+            {feed.tags.length>3 && 
+              <div className={classes.chipRoot}>
+                <span>+{feed.tags.length-3} more</span>
+              </div>
+            }
           </div>
           ):''}
           <div className={classes.sourceText}>

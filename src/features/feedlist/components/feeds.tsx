@@ -38,6 +38,7 @@ const Feeds = ({
   searchOpen,
   feedIds,
 }:Props) => {
+  console.log("Rendering Feeds");
   const classes = useStyles();
   return (
     <div className={clsx(classes.feedContainer,{[classes.feedContainerShifted]:searchOpen})}>

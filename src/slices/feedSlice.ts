@@ -6,11 +6,11 @@ import {IFeedDocument} from 'services/feed.service';
 
 
 export interface IFeedFilter{
-  showImportant : true | null;
-  showUnread: true | null;
-  showReadLater: true | null;
-  tag: string | null;
-  sortBy: 'pubDate:desc' | 'retrieveDate:desc'
+  showImportant ?: boolean | null;
+  hideRead ?: boolean | null;
+  showReadLater ?: boolean | null;
+  tagName ?: string | null;
+  sortBy ?: 'pubDate:desc' | 'retrieveDate:desc'
 }
 export interface FeedState{
   feedIds: string[];
@@ -24,9 +24,9 @@ const initialState: FeedState = {
   loadedFeeds: {},
   filters: {
     showImportant: null,
-    showUnread: null,
+    hideRead: false,
     showReadLater: null,
-    tag: null,
+    tagName: null,
     sortBy: 'retrieveDate:desc'
   }
 };
@@ -87,6 +87,9 @@ const feedSlice = createSlice({
       if(feed){
         state.loadedFeeds[feedId] = {...feed,readLater:false};
       }
+    },
+    changedFilter: (state,action:PayloadAction<IFeedFilter>) => {
+      state.filters = {...state.filters,...action.payload}
     }
   }
 })
@@ -99,6 +102,7 @@ export const {
   markedUnImportant,
   markedReadLater,
   removedReadLater,
+  changedFilter,
 } = feedSlice.actions;
 
 export default feedSlice.reducer;

@@ -8,6 +8,7 @@ interface OwnProps{
 }
 
 const mapState = (state: RootState) => ({
+  filters: state.feeds.filters,
 });
 
 const mapDispatch = (dispatch:AppDispatch) => ({
@@ -22,10 +23,12 @@ type Props = PropsFromRedux & OwnProps;
 
 const FeedList = ({
   listFeeds,
+  filters,
 }:Props) => {
+  console.log("Rendering FeedList");
   const [searchOpen,setSearchOpen] = useState(false);
 
-  useEffect(()=> listFeeds({}),[]);
+  useEffect(()=> listFeeds(filters),[filters]);
   return (
     <>
       <FeedListFilter searchOpen={searchOpen} setSearchOpen={setSearchOpen}/>

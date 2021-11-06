@@ -12,20 +12,38 @@ import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateC
 
 import useStyles from './tagRowStyle';
 
+import {history} from 'app/history';
+import {changedFilter} from 'slices/feedSlice';
+
 interface OwnProps{
   index: number;
   style: any;
 }
 
 const mapState = (state: RootState, ownProps: OwnProps) => {
-  const tagId = state.tags.subscribedIds[ownProps.index];
+  let tagId,tag,newCount,isSelected;
+  if(ownProps.index>0){
+    tagId = state.tags.subscribedIds[ownProps.index-1];
+    tag = state.tags.loadedTags[tagId];
+    newCount= state.tags.newCounts[tagId] || 0;
+    isSelected= state.feeds.filters.tagName === tag.name;
+  } else{
+    tag = null
+    newCount = 0;
+    isSelected = !state.feeds.filters.tagName
+  }
   return {
-    tag: state.tags.loadedTags[tagId],
-    newCount: state.tags.newCounts[tagId] || 0
+    tag,
+    newCount,
+    isSelected
   }
 };
 
 const mapDispatch = (dispatch:AppDispatch) => ({
+  setSelectedTag(tag:any){
+    dispatch(changedFilter({tagName:tag?tag.name:null}));
+    history.push('/feeds');
+  }
 });
 
 const connector = connect(mapState, mapDispatch);
@@ -37,6 +55,8 @@ const SubscribedTagRow = ({
   style,
   tag,
   newCount,
+  isSelected,
+  setSelectedTag,
 }:Props) => {
   const classes = useStyles();
   const [toolOpen,setToolOpen] = useState(false); 
@@ -45,12 +65,12 @@ const SubscribedTagRow = ({
       key={`f${index}`}
       style={style}
       className={classes.feedItem}
-      selected={false}
-      onClick={(e) => {}}
-      onMouseEnter={(e)=>{setToolOpen(true);}}
-      onMouseLeave={(e)=>{setToolOpen(false);}}
+      selected={isSelected}
+      onClick={(e) => {setSelectedTag(tag)}}
+      onMouseEnter={(e)=>{tag && setToolOpen(true);}}
+      onMouseLeave={(e)=>{tag && setToolOpen(false);}}
     > 
-      <ListItemText primary={tag.name.toUpperCase()} className={classes.feedItemText}/>
+      <ListItemText primary={tag?tag.name.toUpperCase():'All'} className={classes.feedItemText}/>
       {newCount?(
       <Badge badgeContent={newCount} color="primary" className={classes.feedBadge}></Badge>
       ):''}
