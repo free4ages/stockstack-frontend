@@ -1,6 +1,6 @@
 import { client } from './client';
-import { user } from './user.service'
-import { auth } from './auth.service'
+import user from './user.service'
+import auth from './auth.service'
 const BackendAPI = {
   auth,
   user,

@@ -1,5 +1,5 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
-import {retrievedArticleList} from 'features/articlelist/articleSlice';
+import {retrievedArticleList} from 'slices/articleSlice';
 import articleService from 'services/article.service';
 
 export default (filters:any): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {

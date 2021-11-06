@@ -22,7 +22,7 @@ export enum GrantResources {
 export interface IGrantPermissions extends Array<IPermission> {}
 
 const login = (params: ILoginParams) => {
-  return client.post('/auth/local', params)//.then((response:any) => {
+  return client.post('/auth/login', params)//.then((response:any) => {
 //    if(response?.data?.token){
 //      client.defaults.headers["Authorization"] = `Bearer ${response?.data?.token}`;
 //    }
@@ -43,7 +43,7 @@ const grantPermissions = () => {
   return client.get('/auth/permissions');
 };
 
-export const auth = { 
+export default { 
   login, 
   //googleLogin, 
   grantPermissions, 

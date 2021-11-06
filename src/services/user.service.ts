@@ -14,7 +14,7 @@ export interface IUserDocument extends IUser, IDocument {}
 const me = () => {
   return client.get<IUserDocument>(`/users/me`);
 };
-export const user = {
+export default {
   me,
 
 };

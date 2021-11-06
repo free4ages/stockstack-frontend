@@ -1,9 +1,10 @@
 import axios,{AxiosInstance} from 'axios';
+import {storageGet} from 'utils/storage';
 const instance:AxiosInstance = axios.create();
 
 instance.interceptors.request.use(
   config => {
-    const token = localStorage.getItem("token");
+    const token = storageGet("token","session");
     config.headers = config.headers || {};
     if (token) {
       config.headers["Authorization"] = 'Bearer ' + token;
@@ -16,14 +17,14 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   successRes => successRes,
   ({ response }) => {
-    console.log('error : response -> ', response);
-    if (response?.status === 401) {
-      localStorage.removeItem('token');
+    //console.log('error : response -> ', response);
+    //if (response?.status === 401) {
+    //  localStorage.removeItem('token');
 
-      if (!response?.url || !response?.url.includes('auth/local')) {
-        window.location.reload();
-      }
-    }
+    //  if (!response?.url || !response?.url.includes('auth/local')) {
+    //    window.location.reload();
+    //  }
+    //}
     return Promise.reject(response);
   }
 );
