@@ -9,6 +9,7 @@ export interface IFeedFilter{
   showImportant ?: boolean | null;
   hideRead ?: boolean | null;
   showReadLater ?: boolean | null;
+  q ?: string | null;
   tagName ?: string | null;
   sortBy ?: 'pubDate:desc' | 'retrieveDate:desc'
 }
@@ -27,6 +28,7 @@ const initialState: FeedState = {
     hideRead: false,
     showReadLater: null,
     tagName: null,
+    q: null,
     sortBy: 'retrieveDate:desc'
   }
 };
@@ -90,6 +92,18 @@ const feedSlice = createSlice({
     },
     changedFilter: (state,action:PayloadAction<IFeedFilter>) => {
       state.filters = {...state.filters,...action.payload}
+    },
+    setFilterTag: (state,action:PayloadAction<string|null>) => {
+      state.filters = {...state.filters,tagName:action.payload,q:null}
+    },
+    setSearchText : (state,action:PayloadAction<{query:string,all?:boolean}>) => {
+      const {query,all=false} = action.payload;
+      //if all is set remove all applied filter
+      if(all){
+        state.filters = {...state.filters,tagName:null,showImportant:null,hideRead:null,showReadLater:null,q:query};
+      }else{
+        state.filters = {...state.filters,q:query};
+      }
     }
   }
 })
@@ -103,6 +117,8 @@ export const {
   markedReadLater,
   removedReadLater,
   changedFilter,
+  setFilterTag,
+  setSearchText,
 } = feedSlice.actions;
 
 export default feedSlice.reducer;

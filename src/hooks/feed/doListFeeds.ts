@@ -19,7 +19,10 @@ const tranformFilters = (filters:IFeedFilter): IFeedListParams => {
     else if(key==="tagName"){
       if(value) transformed["tagNames"] = value;
     }
-    else{
+    else if(key==="q"){
+      if(value) transformed["q"] = value;
+    }
+    else if(value!==null){
       transformed[key]=value;
     }
   }

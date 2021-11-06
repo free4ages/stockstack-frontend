@@ -1,6 +1,5 @@
-export default function debounce (fn:any, time:number) {
+export default function debounce<T extends Function>(fn:any, time:number) {
   let timeoutId:any;
-  return wrapper
   function wrapper (...args:any) {
     if (timeoutId) {
       clearTimeout(timeoutId)
@@ -10,5 +9,6 @@ export default function debounce (fn:any, time:number) {
       fn(...args)
     }, time)
   }
+  return <T>(<any>wrapper);
 }
 

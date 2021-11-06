@@ -13,7 +13,7 @@ import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateC
 import useStyles from './tagRowStyle';
 
 import {history} from 'app/history';
-import {changedFilter} from 'slices/feedSlice';
+import {setFilterTag} from 'slices/feedSlice';
 
 interface OwnProps{
   index: number;
@@ -41,7 +41,7 @@ const mapState = (state: RootState, ownProps: OwnProps) => {
 
 const mapDispatch = (dispatch:AppDispatch) => ({
   setSelectedTag(tag:any){
-    dispatch(changedFilter({tagName:tag?tag.name:null}));
+    dispatch(setFilterTag((tag?tag.name:null)));
     history.push('/feeds');
   }
 });

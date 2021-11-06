@@ -4,11 +4,12 @@ import {RootState,AppDispatch} from 'app/store';
 import clsx from "clsx";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 
-import SearchBar from "material-ui-search-bar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import SearchIcon from "@material-ui/icons/Search";
 import FilterAllIcon from "@material-ui/icons/IndeterminateCheckBox";
@@ -24,7 +25,9 @@ import TurnedInIcon from '@material-ui/icons/TurnedIn';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
 import {IFeedFilter} from 'slices/feedSlice';
-import {changedFilter} from 'slices/feedSlice';
+import debounce from 'utils/debounce';
+import {changedFilter,setSearchText} from 'slices/feedSlice';
+import SearchBar from 'components/searchBar';
 
 const useStyles = makeStyles((theme:Theme) => ({
   toolbar: {
@@ -63,11 +66,17 @@ const mapState = (state: RootState) => ({
   filters: state.feeds.filters,
 });
 
-const mapDispatch = (dispatch:AppDispatch) => ({
-  changeFilter(filter:IFeedFilter){
-    dispatch(changedFilter(filter));
+
+const mapDispatch = (dispatch:AppDispatch) => {
+  return {
+    changeFilter(filter:IFeedFilter){
+      dispatch(changedFilter(filter));
+    },
+    search(params:{query:string,all?:boolean}){
+      dispatch(setSearchText(params));
+    }
   }
-});
+};
 
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -78,8 +87,17 @@ const FeedListFilter = ({
   setSearchOpen,
   filters,
   changeFilter,
+  search
 }:Props) => {
   const classes = useStyles();
+  const [searchAll,setSearchAll] = useState(false);
+
+  const handleSearchToggle = (e:any) => {
+    if(searchOpen){
+      search({query:''});
+    }
+    setSearchOpen(!searchOpen);
+  }
   return (
       <div className={classes.filterBar}>
       <Toolbar className={clsx(classes.toolbar)}>
@@ -140,18 +158,26 @@ const FeedListFilter = ({
             </IconButton>
           </Tooltip>
           <Tooltip title="Search">
-            <IconButton className={classes.filterIcon} onClick={()=>{setSearchOpen(!searchOpen)}}>
+            <IconButton className={classes.filterIcon} onClick={handleSearchToggle}>
               <SearchIcon />
             </IconButton>
           </Tooltip>
         </div>
       </Toolbar>
       {searchOpen && (
-        <SearchBar/>
+        <SearchBar
+          value={filters.q || ""}
+          endAdornment={<InputAdornment position="end">
+            <Tooltip title="Search All Feed">
+              <Checkbox onChange={(e)=> setSearchAll(e.target.checked)} />
+            </Tooltip>
+          </InputAdornment>}
+          onRequestSearch={(value:string) => search({query:value,all:searchAll})}
+          onCancelSearch={() => search({query:'',all:false})}
+        />
       )}
     </div>
   );
 };
 
 export default connector(FeedListFilter);
-
