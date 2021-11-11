@@ -9,36 +9,31 @@ import { ThemeProvider } from "@material-ui/styles";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {defaultTheme} from './theme';
-import BackendAPI from './services';
 import {history} from 'app/history';
-
-
+import WebSocketProvider from 'components/webSocketProvider';
 
 import routes from "./routes";
-import AuthAPI from "./services/auth";
-
-
-BackendAPI.setENV('dev');
-
 
 function App() {
   return (
-    <Router history={history}>
-      <Switch>
-        {
-          routes.map((props) => {
-            const { route, routeProps} = props;
+    <WebSocketProvider>
+      <Router history={history}>
+        <Switch>
+          {
+            routes.map((props) => {
+              const { route, routeProps} = props;
 
-            return (
-              <Route key={route} path={route} {...routeProps}>
-                <CustomRender route={props}/>
-                <ToastContainer/>
-              </Route>
-            )
-          })
-        }
-      </Switch>
-    </Router>
+              return (
+                <Route key={route} path={route} {...routeProps}>
+                  <CustomRender route={props}/>
+                  <ToastContainer/>
+                </Route>
+              )
+            })
+          }
+        </Switch>
+      </Router>
+    </WebSocketProvider>
   );
 }
 

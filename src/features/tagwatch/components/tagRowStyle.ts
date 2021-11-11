@@ -44,6 +44,10 @@ const useStyles = makeStyles((theme: Theme) =>({
     paddingTop: 2,
     paddingBottom: 2,
   },
+  searchRow: {
+    paddingTop:2,
+    paddingBottom:2
+  }
 }));
 
 export default useStyles;

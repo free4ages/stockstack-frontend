@@ -76,9 +76,7 @@ const TagWatch = ({
         <Tab icon={<SearchIcon/>} aria-label="Item Three" classes={{root:classes.tabSearch}}/>
       </Tabs>
       <Divider />
-      {selectedTab === 0 && !displaySearch && (
-        <SubscribedTagList />
-      )}
+      <SubscribedTagList show={(selectedTab === 0 && !displaySearch)}/>
       {selectedTab === 1 && !displaySearch && (
         <PinnedTagList />
       )}

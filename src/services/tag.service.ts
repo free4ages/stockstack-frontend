@@ -12,12 +12,27 @@ const list = (params:IListParams)=>{
   return client.get<IListResponse<ITagDocument>>('/tags',{params});
 };
 
+const search = (params: IListParams) => {
+  return client.get<IListResponse<ITagDocument>>('/tags/search',{params});
+}
+
 const me = ()=>{
   return client.get<IListResponse<ITagDocument>>('/tags/me');
 };
 
+const subscribe = (tagId:string)=>{
+  return client.post('/tags/subscribe',{tagId});
+}
+
+const unsubscribe = (tagId:string)=>{
+  return client.post('/tags/unsubscribe',{tagId});
+}
+
 export default {
   list,
-  me
+  search,
+  me,
+  subscribe,
+  unsubscribe
 }
 

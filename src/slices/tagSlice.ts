@@ -35,10 +35,26 @@ const tagSlice = createSlice({
       });
       state.subscribedIds = tagIds;
     },
+    subscribedTag: (state,action:PayloadAction<ITagDocument>) => {
+      const tag = action.payload;
+      if(!state.loadedTags[tag.id]){
+        state.loadedTags[tag.id] = tag;
+      }
+      if(state.subscribedIds.indexOf(tag.id)===-1){
+        state.subscribedIds = [...state.subscribedIds,tag.id];
+      }
+    },
+    unSubscribedTag: (state,action:PayloadAction<ITagDocument>) => {
+      state.subscribedIds = state.subscribedIds.filter((tagId:string) => tagId!==action.payload.id);
+    }
   }
 });
 
-export const {retrievedSubscribedTagList} = tagSlice.actions;
+export const {
+  retrievedSubscribedTagList,
+  subscribedTag,
+  unSubscribedTag,
+} = tagSlice.actions;
 
 export default tagSlice.reducer;
 

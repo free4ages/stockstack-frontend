@@ -26,6 +26,7 @@ export interface IListParams {
   populate?: boolean;
   q?: string;
   all?: boolean;
+  paginate?: boolean;
 }
 
 export interface IListResponse<T> {

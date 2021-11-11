@@ -39,6 +39,7 @@ const feedSlice = createSlice({
   initialState,
   reducers:{
     retrievedFeedList: (state,action:PayloadAction<IFeedDocument[]>)=>{
+      console.log(action);
       const feeds = action.payload;
       const feedIds = feeds.map(feed=>feed.id);
       const feedMap:{[key:string]:IFeedDocument} = {};
