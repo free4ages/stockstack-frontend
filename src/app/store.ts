@@ -8,7 +8,13 @@ import rootReducer from './rootReducer'
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(socketMiddleware(socketClient)),
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware({
+      serializableCheck:{
+        ignoredActions: ['socket']
+      }
+    })
+    .concat(socketMiddleware(socketClient)),
 });
 
 export type RootState = ReturnType<typeof rootReducer>

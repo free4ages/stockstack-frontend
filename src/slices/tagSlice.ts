@@ -5,7 +5,7 @@ import { AppThunk,RootState } from 'app/store'
 import {ITagDocument} from 'services/tag.service';
 
 
-export interface TagState{
+export interface ITagState{
   subscribedIds: string[];
   pinnedIds: string[];
   searchResults: ITagDocument[];
@@ -13,8 +13,12 @@ export interface TagState{
   filters : any;
   newCounts: {[key:string]:number};
 }
+export interface ITagCount{
+  name: string;
+  count: number;
+}
 
-const initialState: TagState = {
+const initialState: ITagState = {
   subscribedIds: [],
   pinnedIds: [],
   searchResults : [],
@@ -46,6 +50,32 @@ const tagSlice = createSlice({
     },
     unSubscribedTag: (state,action:PayloadAction<ITagDocument>) => {
       state.subscribedIds = state.subscribedIds.filter((tagId:string) => tagId!==action.payload.id);
+    },
+    retrievedFeedTagCounts: (state,action:PayloadAction<ITagCount[]>) => {
+      const data = action.payload; 
+      const counts:{[key:string]:number}={};
+      data.forEach((c) => {
+        counts[c.name] = c.count;
+      });
+      state.newCounts = counts;
+    },
+    arrangedSubscribedTags: (state,action:PayloadAction<string[]>) => {
+      state.subscribedIds = action.payload;
+    },
+    updateNewCount: (state,action:PayloadAction<{tagName:string,delta:number}[]>) => {
+      action.payload.forEach(({tagName,delta})=>{;
+        if(!state.newCounts[tagName]){
+          state.newCounts[tagName] = 0;
+        }
+        const newCount = state.newCounts[tagName]+delta;
+        state.newCounts[tagName] = (newCount>=0)?newCount:0;
+      });
+    },
+    updateLastUpdated: (state,action:PayloadAction<{tagId:string}>) => {
+      const {tagId} = action.payload;
+      if(state.loadedTags[tagId]){
+        state.loadedTags[tagId] = {...state.loadedTags[tagId],lastUpdated:new Date().toISOString()}
+      }
     }
   }
 });
@@ -54,6 +84,10 @@ export const {
   retrievedSubscribedTagList,
   subscribedTag,
   unSubscribedTag,
+  retrievedFeedTagCounts,
+  arrangedSubscribedTags,
+  updateNewCount,
+  updateLastUpdated,
 } = tagSlice.actions;
 
 export default tagSlice.reducer;

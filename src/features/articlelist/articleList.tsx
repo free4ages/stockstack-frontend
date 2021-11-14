@@ -8,6 +8,7 @@ interface OwnProps{
 }
 
 const mapState = (state: RootState) => ({
+  filters: state.articles.filters,
 });
 
 const mapDispatch = (dispatch:AppDispatch) => ({
@@ -22,10 +23,11 @@ type Props = PropsFromRedux & OwnProps;
 
 const ArticleList = ({
   listArticles,
+  filters,
 }:Props) => {
   const [searchOpen,setSearchOpen] = useState(false);
 
-  useEffect(()=> listArticles({}),[]);
+  useEffect(()=> listArticles(filters),[filters]);
   return (
     <>
       <ArticleListFilter searchOpen={searchOpen} setSearchOpen={setSearchOpen}/>

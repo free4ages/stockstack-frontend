@@ -4,7 +4,7 @@ export interface ITagDocument extends IDocument{
   name: string;
   displayName ?: string;
   aliases?: string[];
-  lastUpdated?: Date;
+  lastUpdated?: string;
   subscribed?: boolean;
 };
 

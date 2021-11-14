@@ -4,7 +4,6 @@ import { AppThunk,RootState } from 'app/store'
 
 import {IFeedDocument} from 'services/feed.service';
 
-
 export interface IFeedFilter{
   showImportant ?: boolean | null;
   hideRead ?: boolean | null;
@@ -13,14 +12,14 @@ export interface IFeedFilter{
   tagName ?: string | null;
   sortBy ?: 'pubDate:desc' | 'retrieveDate:desc'
 }
-export interface FeedState{
+export interface IFeedState{
   feedIds: string[];
   loadedFeeds: {[key: string]: IFeedDocument};
   filters : IFeedFilter;
 }
 
 
-const initialState: FeedState = {
+const initialState: IFeedState = {
   feedIds: [],
   loadedFeeds: {},
   filters: {
@@ -39,7 +38,6 @@ const feedSlice = createSlice({
   initialState,
   reducers:{
     retrievedFeedList: (state,action:PayloadAction<IFeedDocument[]>)=>{
-      console.log(action);
       const feeds = action.payload;
       const feedIds = feeds.map(feed=>feed.id);
       const feedMap:{[key:string]:IFeedDocument} = {};
@@ -49,43 +47,47 @@ const feedSlice = createSlice({
       state.feedIds = feedIds;
       state.loadedFeeds = feedMap;
     },
-    markedRead: (state,action)=>{
-      const feedId = action.payload;
+    markedRead: (state,action:PayloadAction<{feedId:string,updateReadLater?:boolean}>)=>{
+      const {feedId,updateReadLater=false} = action.payload;
       const feed = state.loadedFeeds[feedId];
       if(feed){
-        state.loadedFeeds[feedId] = {...feed,isRead:true,readLater:false};
+        state.loadedFeeds[feedId] = {...feed,isRead:true,readLater:updateReadLater?false:feed.readLater};
       }
     },
-    markedUnRead: (state,action)=>{
-      const feedId = action.payload;
+    markedUnRead: (state,action:PayloadAction<{feedId:string}>)=>{
+      const {feedId} = action.payload;
       const feed = state.loadedFeeds[feedId];
       if(feed){
         state.loadedFeeds[feedId] = {...feed,isRead:false};
       }
     },
-    markedImportant: (state,action)=>{
-      const feedId = action.payload;
+    markedImportant: (state,action:PayloadAction<{feedId:string}>)=>{
+      const {feedId} = action.payload;
       const feed = state.loadedFeeds[feedId];
       if(feed){
         state.loadedFeeds[feedId] = {...feed,important:true};
       }
     },
-    markedUnImportant: (state,action)=>{
-      const feedId = action.payload;
+    markedUnImportant: (state,action:PayloadAction<{feedId:string}>)=>{
+      const {feedId} = action.payload;
       const feed = state.loadedFeeds[feedId];
       if(feed){
         state.loadedFeeds[feedId] = {...feed,important:false};
       }
     },
-    markedReadLater: (state,action)=>{
-      const feedId = action.payload;
+    markedReadLater: (state,action:PayloadAction<{feedId:string,updateRead?:boolean}>)=>{
+      const {feedId,updateRead=true} = action.payload;
       const feed = state.loadedFeeds[feedId];
       if(feed){
-        state.loadedFeeds[feedId] = {...feed,isRead:false,readLater:true};
+        state.loadedFeeds[feedId] = {
+          ...feed,
+          isRead:updateRead?false:feed.isRead,
+          readLater:true
+        };
       }
     },
-    removedReadLater: (state,action)=>{
-      const feedId = action.payload;
+    removedReadLater: (state,action:PayloadAction<{feedId:string}>)=>{
+      const {feedId} = action.payload;
       const feed = state.loadedFeeds[feedId];
       if(feed){
         state.loadedFeeds[feedId] = {...feed,readLater:false};

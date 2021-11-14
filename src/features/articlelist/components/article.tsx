@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import moment from 'moment';
 import { ConnectedProps,connect } from 'react-redux'
-import {RootState} from 'app/store';
+import {RootState,AppDispatch} from 'app/store';
 import {IArticleDocument} from 'services/article.service';
 import clsx from "clsx";
 import { makeStyles, Theme } from "@material-ui/core/styles";
@@ -16,11 +16,19 @@ import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlin
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
 
+import truncate from 'utils/truncate';
+
+import {
+  doToggleRead,
+  doToggleImportant,
+  doToggleReadLater
+} from 'hooks/article';
+
 const useStyles = makeStyles((theme:Theme) => ({
   root: {
     overflow: 'hidden',
     border:'1px solid #dfe1e5',
-    borderRadius: 8,
+    borderRadius: 0,
     boxShadow: 'none',
     marginBottom: 16,
     fontWeight:'normal',
@@ -90,19 +98,41 @@ interface OwnProps{
   articleId: string;
 }
 
-const mapState = (state: RootState,ownProps: OwnProps) => ({
-  article: state.articles.loadedArticles[ownProps.articleId]
+const mapState = (state: RootState,ownProps: OwnProps) => {
+  const articleState = state.articles;
+  const articleId = ownProps.articleId;
+  const info = articleState.articlesInfo;
+  return {
+    article: articleState.loadedArticles[articleId],
+    important: !!info[articleId]?.important,
+    isHidden: (!!info[articleId]?.isRead && articleState.filters.hideRead),
+    readLater: !!info[articleId]?.readLater,
+    isRead: !!info[articleId]?.isRead,
+  }
+};
+
+const mapDispatch = (dispatch:AppDispatch) =>({
+  toggleRead(article:IArticleDocument,value:boolean){
+    dispatch(doToggleRead(article,value));
+  },
+  toggleImportant(article:IArticleDocument,value:boolean){
+    dispatch(doToggleImportant(article,value));
+  },
+  toggleReadLater(article:IArticleDocument,value:boolean){
+    dispatch(doToggleReadLater(article,value));
+  },
 });
 
-const mapDispatch = {
-
-};
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & OwnProps;
 
 const Article = ({
-  article
+  article,
+  important,
+  isHidden,
+  readLater,
+  isRead,
 }:Props) => {
   console.log("Rendering article");
   const classes = useStyles();
@@ -112,9 +142,11 @@ const Article = ({
         <div className={classes.heading}>
           {article.title}
         </div>
+        {article?.shortText && (
         <div className={classes.shortText}>
-          {article.shortText}
+          {truncate(article.shortText,150)}
         </div>
+        )}
         <div className={classes.bottomText}>
           <div className={classes.timeText}>
             <span>{moment(article.pubDate).fromNow()}  [ {article.sourceDomain} ]</span>

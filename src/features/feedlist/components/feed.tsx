@@ -109,14 +109,14 @@ const mapState = (state: RootState,ownProps: OwnProps) => ({
 });
 
 const mapDispatch = (dispatch:AppDispatch) =>({
-  toggleRead(feedId:string,value:boolean){
-    dispatch(doToggleRead(feedId,value));
+  toggleRead(feed:IFeedDocument,value:boolean){
+    dispatch(doToggleRead(feed,value));
   },
-  toggleImportant(feedId:string,value:boolean){
-    dispatch(doToggleImportant(feedId,value));
+  toggleImportant(feed:IFeedDocument,value:boolean){
+    dispatch(doToggleImportant(feed,value));
   },
-  toggleReadLater(feedId:string,value:boolean){
-    dispatch(doToggleReadLater(feedId,value));
+  toggleReadLater(feed:IFeedDocument,value:boolean){
+    dispatch(doToggleReadLater(feed,value));
   },
 });
 const connector = connect(mapState, mapDispatch);
@@ -158,7 +158,7 @@ const Feed = ({
           ):''}
           <div className={classes.sourceText}>
           <Tooltip title={feed.important?"Mark UnImportant":"Mark Important"}>
-            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:feed.important})} onClick={()=>toggleImportant(feed.id,!feed.important)}>
+            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:feed.important})} onClick={()=>toggleImportant(feed,!feed.important)}>
               {feed.important ?( 
                 <StarIcon />
               ):(
@@ -167,7 +167,7 @@ const Feed = ({
             </IconButton>
           </Tooltip>
           <Tooltip title={feed.readLater?"Remove":"Read Later"}>
-            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:feed.readLater})} onClick={()=>toggleReadLater(feed.id,!feed.readLater)}>
+            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:feed.readLater})} onClick={()=>toggleReadLater(feed,!feed.readLater)}>
               {feed.readLater?(
                 <TurnedInIcon />
               ):(
@@ -176,7 +176,7 @@ const Feed = ({
             </IconButton>
           </Tooltip>
           <Tooltip title={feed.isRead?"Mark Unread":"Mark Read"}>
-            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:feed.isRead})} onClick={()=>{ toggleRead(feed.id,!feed.isRead);}}>
+            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:feed.isRead})} onClick={()=>{ toggleRead(feed,!feed.isRead);}}>
               {feed.isRead?(
                 <CheckCircleIcon />
               ):(

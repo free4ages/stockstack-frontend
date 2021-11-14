@@ -30,14 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>({
   feedItemToolBar:{
     position:'absolute',
     right:0,
-    top:0,
+    top:2,
     marginRight:40,
     '& .MuiIconButton-root:hover':{
       backgroundColor:'inherit'
-    }
+    },
   },
   feedBadge: {
-    opacity: 0.6,
+    opacity: 0.8,
     right: 2
   },
   feed: {
@@ -47,6 +47,10 @@ const useStyles = makeStyles((theme: Theme) =>({
   searchRow: {
     paddingTop:2,
     paddingBottom:2
+  },
+  timeText: {
+    marginRight:30,
+    color: '#70757a',
   }
 }));
 

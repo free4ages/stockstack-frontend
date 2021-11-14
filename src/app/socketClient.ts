@@ -5,11 +5,16 @@ class SocketAPI {
   handlers:{event:string,callback:any}[] = [];
   connected = false;
   handlerRegistered = false;
+  pendingActions:{event:string,data:any}[] = [];
   connect(token:string) {
     if(this.socket) return Promise.resolve();
     this.socket = io(config.webSocketUrl, { auth: {token:`Bearer ${token}`} });
     return new Promise((resolve, reject) => {
-      this.socket.on('connect', () => {console.log("My socket connected");this.registerHandlers();resolve(true)});
+      this.socket.on('connect', () => {
+        console.log("My socket connected");
+        this.registerHandlers();
+        this.runPendingActions();
+        resolve(true)});
       this.socket.on('connect_error', (error:any) => reject(error));
     });
   }
@@ -21,6 +26,12 @@ class SocketAPI {
       this.socket.on(handler.event,handler.callback);
     }
     this.handlerRegistered = true;
+  }
+  runPendingActions() {
+    this.pendingActions.forEach(action=>{
+      this.emit(action.event,action.data);
+    });
+    this.pendingActions=[];
   }
 
   disconnect() {
@@ -39,9 +50,15 @@ class SocketAPI {
   }
 
   emit(event:string, data:any) {
+    const action:{event:string,data:any} = {event,data};
     return new Promise((resolve, reject) => {
-      if (!this.socket) return reject('No socket connection.');
+      if (!this.socket){
+        //console.log("socket has not been initialized yet");
+        this.pendingActions.push(action);
+        return resolve(false);
+      }
 
+      console.log(`Emiting socket event ${event}`,data);
       return this.socket.emit(event, data, (response:any) => {
         // Response is the optional callback that you can use with socket.io in every request. See 1 above.
         if (response.error) {
@@ -66,14 +83,11 @@ class SocketAPI {
         this.handlers.splice(index,1);
       }
     }
-    return new Promise((resolve, reject) => {
-      if (this.socket){
-        this.socket.on(handler.event, handler.callback);
-      }
-      this.handlers.push(handler);
-
-      resolve(unsubscribe);
-    });
+    if (this.socket){
+      this.socket.on(handler.event, handler.callback);
+    }
+    this.handlers.push(handler);
+    return unsubscribe;
   }
 }
 

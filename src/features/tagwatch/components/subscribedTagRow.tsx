@@ -1,4 +1,6 @@
 import React, {useEffect,useState} from 'react';
+import moment from 'moment';
+import ReactTimeAgo from 'react-time-ago'
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 
@@ -9,6 +11,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 
 import useStyles from './tagRowStyle';
 
@@ -25,7 +29,7 @@ const mapState = (state: RootState, ownProps: OwnProps) => {
   if(ownProps.index>0){
     tagId = state.tags.subscribedIds[ownProps.index-1];
     tag = state.tags.loadedTags[tagId];
-    newCount= state.tags.newCounts[tagId] || 0;
+    newCount= state.tags.newCounts[tag.name] || 0;
     isSelected= state.feeds.filters.tagName === tag.name;
   } else{
     tag = null
@@ -71,11 +75,26 @@ const SubscribedTagRow = ({
       onMouseLeave={(e)=>{tag && setToolOpen(false);}}
     > 
       <ListItemText primary={tag?tag.name.toUpperCase():'All'} className={classes.feedItemText}/>
+      {!toolOpen && tag?.lastUpdated && (
+        <div className={classes.timeText}>
+          <ReactTimeAgo date={new Date(tag.lastUpdated)} locale="en-US" timeStyle="round-minute"/>
+        </div>
+      )}
       {newCount?(
       <Badge badgeContent={newCount} color="primary" className={classes.feedBadge}></Badge>
       ):''}
       {toolOpen && (
         <div className={classes.feedItemToolBar}>
+          <Tooltip title="View Articles">
+            <IconButton size="small" onClick={(e)=>{e.stopPropagation();history.push('/articles')}}>
+              <VisibilityOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Mark All Read">
+            <IconButton size="small" onClick={()=>{}}>
+              <CheckBoxOutlinedIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Unsubscribe">
             <IconButton size="small" onClick={()=>{}}>
               <IndeterminateCheckBoxOutlinedIcon />

@@ -1,8 +1,8 @@
 const socketEmit = (event:string,payload:any) => {
   return {
     type: 'socket',
-    types: ['SEND', 'SEND_SUCCESS', 'SEND_FAIL']
-    promise: (socket) => socket.emit(event,payload)
+    types: ['SOCKET_SEND', 'SOCKET_SEND_SUCCESS', 'SOCKET_SEND_FAIL'],
+    promise: (socket:any) => socket.emit(event,payload)
   }
 };
 
