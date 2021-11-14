@@ -1,5 +1,7 @@
 import {IDocument,IListParams,IListResponse} from './types';
 import { client } from './client';
+
+
 export interface IMarkParams{
   articleId: string;
   value: boolean;
@@ -17,12 +19,14 @@ export interface IArticleDocument extends IDocument{
   sourceDomain : string;
 };
 
+export type IArticleListResponse = IListResponse<IArticleDocument>;
+
 export interface IArticleListParams extends IListParams{
  tagNames ?: string | string[];
 }
 
 const list = (params:IArticleListParams)=>{
-  return client.get<IListResponse<IArticleDocument>>('/articles',{params});
+  return client.get<IArticleListResponse>('/articles',{params});
 };
 
 const markRead = (data:IMarkParams) => {

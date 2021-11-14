@@ -10,11 +10,17 @@ import Chip from "@material-ui/core/Chip";
 import Paper from '@material-ui/core/Paper';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import Link from '@material-ui/core/Link';
 
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
+import StarIcon from '@material-ui/icons/Star';
+import TurnedInNotIcon from '@material-ui/icons/TurnedInNot';
+import TurnedInIcon from '@material-ui/icons/TurnedIn';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 import truncate from 'utils/truncate';
 
@@ -133,6 +139,9 @@ const Article = ({
   isHidden,
   readLater,
   isRead,
+  toggleImportant,
+  toggleReadLater,
+  toggleRead
 }:Props) => {
   console.log("Rendering article");
   const classes = useStyles();
@@ -153,34 +162,48 @@ const Article = ({
           </div>
           {(article.tags && article.tags.length)? (
           <div className={classes.tagChips}>
-            <Chip classes={{root:classes.chipRoot}} variant="outlined" size="small" label="tatapower" />
-            <Chip classes={{root:classes.chipRoot}} variant="outlined" size="small" label="ongc" />
-            <Chip classes={{root:classes.chipRoot}} variant="outlined" size="small" label="iex" />
-            <div className={classes.chipRoot}>
-              <span>+2 more</span>
-            </div>
+            {article.tags.slice(0,3).map(tag=>(
+              <Chip key={tag} classes={{root:classes.chipRoot}} variant="outlined" size="small" label={tag} />
+            ))}
+            {article.tags.length>3 && 
+              <div className={classes.chipRoot}>
+                <span>+{article.tags.length-3} more</span>
+              </div>
+            }
           </div>
           ):''}
           <div className={classes.sourceText}>
-          <Tooltip title="Mark Important">
-            <IconButton classes={{root:classes.actionButton}} onClick={()=>{}}>
-              <StarBorderOutlinedIcon />
+          <Tooltip title={important?"Mark UnImportant":"Mark Important"}>
+            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:important})} onClick={()=>toggleImportant(article,!important)}>
+              {important ?( 
+                <StarIcon />
+              ):(
+                <StarBorderOutlinedIcon />
+              )}
             </IconButton>
           </Tooltip>
-          <Tooltip title="Read Later">
-            <IconButton classes={{root:classes.actionButton}} onClick={()=>{}}>
-              <BookOutlinedIcon />
+          <Tooltip title={readLater?"Remove":"Read Later"}>
+            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:readLater})} onClick={()=>toggleReadLater(article,!readLater)}>
+              {readLater?(
+                <TurnedInIcon />
+              ):(
+                <TurnedInNotIcon />
+              )}
             </IconButton>
           </Tooltip>
-          <Tooltip title="Mark Read">
-            <IconButton classes={{root:classes.actionButton}} onClick={()=>{}}>
-              <CheckCircleOutlineOutlinedIcon />
+          <Tooltip title={isRead?"Mark Unread":"Mark Read"}>
+            <IconButton classes={{root:classes.actionButton}} className={clsx({[classes.actionButtonActive]:isRead})} onClick={()=>{ toggleRead(article,!isRead);}}>
+              {isRead?(
+                <CheckCircleIcon />
+              ):(
+                <RadioButtonUncheckedIcon />
+              )}
             </IconButton>
           </Tooltip>
           <Tooltip title="Open Link">
-            <IconButton classes={{root:classes.actionButton}} className={clsx(classes.actionButtonActive)} onClick={()=>{}}>
+            <Link classes={{root:classes.actionButton}} className={clsx(classes.actionButtonActive)} href={article.link} target="_blank">
               <LaunchOutlinedIcon />
-            </IconButton>
+            </Link>
           </Tooltip>
           </div>
         </div>

@@ -21,7 +21,7 @@ const tranformFilters = (filters:IArticleFilter): IArticleListParams => {
 export default (filters:any): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
   const response = await articleService.list(tranformFilters(filters));
   const results = response.data.results;
-  dispatch(retrievedArticleList(results));
+  dispatch(retrievedArticleList(response.data));
   const state = getState();
   if(state.auth.user){
     const articleIds = results.map((article:IArticleDocument)=>article.id);

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import {IArticleDocument} from 'services/article.service';
+import {IArticleDocument,IArticleListResponse} from 'services/article.service';
 
 export interface IArticleInfo{
   _id: string; //feedId
@@ -23,6 +23,12 @@ export interface IArticleState{
   loadedArticles: {[key: string]: IArticleDocument};
   filters : IArticleFilter;
   articlesInfo: {[key:string]:IArticleInfo};
+  loading: boolean;
+  moreLoading: boolean;
+  fullLoading: boolean;
+  moreToFetch: boolean;
+  currentPage: number;
+  limit: number;
 }
 
 const initialState: IArticleState = {
@@ -34,22 +40,62 @@ const initialState: IArticleState = {
     tagName: null,
     sortBy: 'retrieveDate:desc',
     hideRead: false
-  }
+  },
+  loading: false,
+  moreLoading: false,
+  fullLoading: false,
+  moreToFetch: true,
+  currentPage: 0,
+  limit: 50
 };
 
 const articleSlice = createSlice({
   name: 'articles',
   initialState,
   reducers:{
-    retrievedArticleList: (state,action:PayloadAction<IArticleDocument[]>)=>{
-      const articles = action.payload;
+    requestedArticleList: (state,action) => {
+      return {...state,fullLoading:true,loading:true};
+    },
+    requestedMoreArticleList: (state,action) => {
+      return {...state,moreLoading:true,loading:true};
+    },
+    retrievedArticleList: (state,action:PayloadAction<IArticleListResponse>)=>{
+      const {results:articles,page} = action.payload;
       const articleIds = articles.map(article=>article.id);
       const articleMap:{[key:string]:IArticleDocument} = {};
       articles.forEach(article=> {
         articleMap[article.id] = article;
       });
-      state.articleIds = articleIds;
-      state.loadedArticles = articleMap;
+      return {
+        ...state,
+        articleIds,
+        loadedArticles: articleMap,
+        loading:false,
+        fullLoading:false,
+        currentPage:page || 0,
+        moreToFetch: !(articleIds.length<state.limit),
+      };
+    },
+    retrievedMoreArticleList: (state,action: PayloadAction<IArticleListResponse>)=> {
+      const {results:articles,page} = action.payload;
+      const articleIds = articles.map(article=>article.id);
+      articles.forEach(article=> {
+        state.loadedArticles[article.id] = article;
+      });
+      const newArticleIds = [...state.articleIds];
+      articleIds.forEach(articleId=>{
+        if(newArticleIds.indexOf(articleId)===-1){
+          newArticleIds.push(articleId);
+        }
+      });
+      return {
+        ...state,
+        articleIds:newArticleIds,
+        loading:false,
+        moreLoading:false,
+        currentPage:page || 0,
+        moreToFetch: !(articleIds.length<state.limit),
+      };
     },
     retrievedArticleInfo:(state,action:PayloadAction<IArticleInfo[]>)=>{
       const articlesInfo = action.payload;
@@ -122,7 +168,10 @@ const articleSlice = createSlice({
 })
 
 export const {
+  requestedArticleList,
+  requestedMoreArticleList,
   retrievedArticleList,
+  retrievedMoreArticleList,
   retrievedArticleInfo,
   changedFilter,
   setSearchText,
