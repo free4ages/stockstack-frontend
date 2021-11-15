@@ -56,8 +56,8 @@ const SubscribedTagList = ({
   },[])
   useEffect(()=>{
     if(isLogged){
-      subscribeFeeds();
-      getFeedTagCounts();
+      setTimeout(()=>subscribeFeeds(),5000);
+      setTimeout(()=>getFeedTagCounts(),4000);
     }
   },[socket,isLogged])
   useEffect(()=>{

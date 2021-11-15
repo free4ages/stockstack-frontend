@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import {IArticleDocument,IArticleListResponse} from 'services/article.service';
+import {IArticleDocument,IArticleListResponse,IArticleListParams} from 'services/article.service';
 
 export interface IArticleInfo{
   _id: string; //feedId
@@ -17,6 +17,7 @@ export interface IArticleFilter{
   tagName ?: string | null;
   sortBy ?: 'pubDate:desc' | 'retrieveDate:desc'
   hideRead ?: boolean | null;
+  limit ?: number;
 }
 export interface IArticleState{
   articleIds: string[],
@@ -28,7 +29,7 @@ export interface IArticleState{
   fullLoading: boolean;
   moreToFetch: boolean;
   currentPage: number;
-  limit: number;
+  requestedFilter: string;
 }
 
 const initialState: IArticleState = {
@@ -39,28 +40,32 @@ const initialState: IArticleState = {
     q: null,
     tagName: null,
     sortBy: 'retrieveDate:desc',
-    hideRead: false
+    hideRead: false,
+    limit: 10,
   },
   loading: false,
   moreLoading: false,
   fullLoading: false,
   moreToFetch: true,
   currentPage: 0,
-  limit: 50
+  requestedFilter: "",
 };
 
 const articleSlice = createSlice({
   name: 'articles',
   initialState,
   reducers:{
-    requestedArticleList: (state,action) => {
-      return {...state,fullLoading:true,loading:true};
+    requestedArticleList: (state,action:PayloadAction<IArticleListParams>) => {
+      return {...state,fullLoading:true,loading:true,requestedFilter:JSON.stringify(action.payload)};
     },
-    requestedMoreArticleList: (state,action) => {
-      return {...state,moreLoading:true,loading:true};
+    requestedMoreArticleList: (state,action:PayloadAction<IArticleListParams>) => {
+      return {...state,moreLoading:true,loading:true,requestedFilter:JSON.stringify(action.payload)};
     },
-    retrievedArticleList: (state,action:PayloadAction<IArticleListResponse>)=>{
-      const {results:articles,page} = action.payload;
+    retrievedArticleList: (state,action:PayloadAction<IArticleListResponse& {requestedFilter:string}>)=>{
+      const {results:articles,page=0,requestedFilter} = action.payload;
+      if(requestedFilter !== state.requestedFilter){
+        return state;
+      } 
       const articleIds = articles.map(article=>article.id);
       const articleMap:{[key:string]:IArticleDocument} = {};
       articles.forEach(article=> {
@@ -73,11 +78,15 @@ const articleSlice = createSlice({
         loading:false,
         fullLoading:false,
         currentPage:page || 0,
-        moreToFetch: !(articleIds.length<state.limit),
+        moreToFetch: !!(articleIds.length>=(state.filters.limit || 50)),
+        requestedFilter:""
       };
     },
-    retrievedMoreArticleList: (state,action: PayloadAction<IArticleListResponse>)=> {
-      const {results:articles,page} = action.payload;
+    retrievedMoreArticleList: (state,action: PayloadAction<IArticleListResponse & {requestedFilter:string}>)=> {
+      const {results:articles,page=0,requestedFilter} = action.payload;
+      if(requestedFilter !== state.requestedFilter){
+        return state;
+      } 
       const articleIds = articles.map(article=>article.id);
       articles.forEach(article=> {
         state.loadedArticles[article.id] = article;
@@ -88,14 +97,11 @@ const articleSlice = createSlice({
           newArticleIds.push(articleId);
         }
       });
-      return {
-        ...state,
-        articleIds:newArticleIds,
-        loading:false,
-        moreLoading:false,
-        currentPage:page || 0,
-        moreToFetch: !(articleIds.length<state.limit),
-      };
+      state.articleIds = newArticleIds;
+      state.loading = false;
+      state.moreLoading = false;
+      state.currentPage = page || 0;
+      state.moreToFetch= !!(articleIds.length>=(state.filters.limit || 50));
     },
     retrievedArticleInfo:(state,action:PayloadAction<IArticleInfo[]>)=>{
       const articlesInfo = action.payload;
@@ -104,6 +110,12 @@ const articleSlice = createSlice({
         infoMap[info.article] = info;
       });
       state.articlesInfo = infoMap;
+    },
+    retrievedMoreArticleInfo:(state,action:PayloadAction<IArticleInfo[]>)=>{
+      const articlesInfo = action.payload;
+      articlesInfo.forEach((info:IArticleInfo)=>{
+        state.articlesInfo[info.article] = info;
+      });
     },
     changedFilter: (state,action:PayloadAction<IArticleFilter>) => {
       state.filters = {...state.filters,...action.payload}
@@ -119,49 +131,37 @@ const articleSlice = createSlice({
     },
     markedRead: (state,action:PayloadAction<{articleId:string,updateReadLater?:boolean}>)=>{
       const {articleId,updateReadLater=false} = action.payload;
-      const info = state.articlesInfo[articleId];
-      if(info){
-        state.articlesInfo[articleId] = {...info,isRead:true,readLater:updateReadLater?false:info.readLater};
-      }
+      const info = state.articlesInfo[articleId] || {article:articleId};
+      state.articlesInfo[articleId] = {...info,isRead:true,readLater:updateReadLater?false:info.readLater};
     },
     markedUnRead: (state,action:PayloadAction<{articleId:string}>)=>{
       const {articleId} = action.payload;
-      const info = state.articlesInfo[articleId];
-      if(info){
-        state.articlesInfo[articleId] = {...info,isRead:false};
-      }
+      const info = state.articlesInfo[articleId] || {article:articleId};
+      state.articlesInfo[articleId] = {...info,isRead:false};
     },
     markedImportant: (state,action:PayloadAction<{articleId:string}>)=>{
       const {articleId} = action.payload;
-      const info = state.articlesInfo[articleId];
-      if(info){
-        state.articlesInfo[articleId] = {...info,important:true};
-      }
+      const info = state.articlesInfo[articleId] || {article:articleId};
+      state.articlesInfo[articleId] = {...info,important:true};
     },
     markedUnImportant: (state,action:PayloadAction<{articleId:string}>)=>{
       const {articleId} = action.payload;
-      const info = state.articlesInfo[articleId];
-      if(info){
-        state.articlesInfo[articleId] = {...info,important:false};
-      }
+      const info = state.articlesInfo[articleId] || {article:articleId};
+      state.articlesInfo[articleId] = {...info,important:false};
     },
     markedReadLater: (state,action:PayloadAction<{articleId:string,updateRead?:boolean}>)=>{
       const {articleId,updateRead=true} = action.payload;
-      const info = state.articlesInfo[articleId];
-      if(info){
-        state.articlesInfo[articleId] = {
-          ...info,
-          isRead:updateRead?false:info.isRead,
-          readLater:true
-        };
-      }
+      const info = state.articlesInfo[articleId] || {article:articleId};
+      state.articlesInfo[articleId] = {
+        ...info,
+        isRead:updateRead?false:info.isRead,
+        readLater:true
+      };
     },
     removedReadLater: (state,action:PayloadAction<{articleId:string}>)=>{
       const {articleId} = action.payload;
-      const info = state.articlesInfo[articleId];
-      if(info){
-        state.articlesInfo[articleId] = {...info,readLater:false};
-      }
+      const info = state.articlesInfo[articleId] || {article:articleId};
+      state.articlesInfo[articleId] = {...info,readLater:false};
     },
 
   }
@@ -173,6 +173,7 @@ export const {
   retrievedArticleList,
   retrievedMoreArticleList,
   retrievedArticleInfo,
+  retrievedMoreArticleInfo,
   changedFilter,
   setSearchText,
   markedRead,

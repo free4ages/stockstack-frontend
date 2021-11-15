@@ -1,5 +1,5 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
-import {retrievedArticleList,requestedArticleList} from 'slices/articleSlice';
+import {retrievedMoreArticleList,requestedMoreArticleList} from 'slices/articleSlice';
 import articleService from 'services/article.service';
 import {IArticleListParams,IArticleDocument} from 'services/article.service';
 import {IArticleFilter} from 'slices/articleSlice';
@@ -23,15 +23,16 @@ const tranformFilters = (filters:IArticleFilter): IArticleListParams => {
 }
 export default (filters:any): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
   const transformedFilter = tranformFilters(filters);
-  dispatch(requestedArticleList(transformedFilter));
+  dispatch(requestedMoreArticleList(transformedFilter));
   const state = getState();
   const requestedFilter = state.articles.requestedFilter;
 
   const response = await articleService.list(transformedFilter);
   const results = response.data.results;
-  dispatch(retrievedArticleList({...response.data,requestedFilter}));
+  dispatch(retrievedMoreArticleList({...response.data,requestedFilter}));
   if(state.auth.user){
     const articleIds = results.map((article:IArticleDocument)=>article.id);
-    dispatch(doListArticlesUserInfo(articleIds));
+    dispatch(doListArticlesUserInfo(articleIds,true));
   }
 };
+
