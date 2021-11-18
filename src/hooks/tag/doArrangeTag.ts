@@ -1,6 +1,6 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
 import {arrangedSubscribedTags} from 'slices/tagSlice';
-export default ():AppThunk => async (dispatch:AppDispatch,getState: ()=>RootState) => {
+const doArrangeTag =  ():AppThunk => async (dispatch:AppDispatch,getState: ()=>RootState) => {
   const state = getState();
   const {subscribedIds,loadedTags,newCounts} = state.tags;
   const sIds = [...subscribedIds];
@@ -25,3 +25,5 @@ export default ():AppThunk => async (dispatch:AppDispatch,getState: ()=>RootStat
   });
   dispatch(arrangedSubscribedTags(sIds));
 };
+
+export default doArrangeTag;

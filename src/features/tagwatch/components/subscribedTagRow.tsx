@@ -17,7 +17,7 @@ import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import useStyles from './tagRowStyle';
 
 import {history} from 'app/history';
-import {setFilterTag} from 'slices/feedSlice';
+import {doListTagFeeds} from 'hooks/feed';
 
 interface OwnProps{
   index: number;
@@ -45,7 +45,7 @@ const mapState = (state: RootState, ownProps: OwnProps) => {
 
 const mapDispatch = (dispatch:AppDispatch) => ({
   setSelectedTag(tag:any){
-    dispatch(setFilterTag((tag?tag.name:null)));
+    dispatch(doListTagFeeds((tag?tag.name:null)));
     history.push('/feeds');
   }
 });

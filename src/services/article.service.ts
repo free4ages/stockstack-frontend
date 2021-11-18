@@ -45,10 +45,13 @@ const markDeleted = (data:IMarkParams) => {
   return client.post('/articles/mark-deleted',data);
 };
 
-export default {
+const articleService = {
   list,
   markRead,
   markReadLater,
   markImportant,
   markDeleted,
-}
+};
+
+export default articleService;
+

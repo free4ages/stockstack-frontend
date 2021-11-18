@@ -43,9 +43,11 @@ const grantPermissions = () => {
   return client.get('/auth/permissions');
 };
 
-export default { 
+const authService =  { 
   login, 
   //googleLogin, 
   grantPermissions, 
   GrantResources 
 };
+
+export default authService;

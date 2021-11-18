@@ -1,4 +1,4 @@
-import React, {useState,useRef,useCallback,useEffect} from 'react';
+import React, {useCallback} from 'react';
 import { ConnectedProps,connect } from 'react-redux'
 import clsx from "clsx";
 import {RootState,AppDispatch} from 'app/store';
@@ -7,7 +7,7 @@ import Article from './article';
 import {doLoadMoreArticles} from 'hooks/article';
 //import RenderIfVisible from 'components/renderIfVisible';
 
-import LoadMore from 'components/loadMore';
+//import LoadMore from 'components/loadMore';
 import ListPlaceHolder from 'components/listPlaceHolder';
 
 const useStyles = makeStyles((theme:Theme) => ({
@@ -47,8 +47,6 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & OwnProps;
 
-
-
 const Articles = ({
   searchOpen,
   articleIds,
@@ -65,7 +63,7 @@ const Articles = ({
         console.log('Loading more articles');
         listMoreArticles({...filters,page:currentPage+1});
       }
-  },[loading,listMoreArticles,currentPage]);
+  },[loading,listMoreArticles,currentPage,filters]);
   return (
     <div className={clsx(classes.articleContainer,{[classes.articleContainerShifted]:searchOpen})}>
       {fullLoading?(
@@ -75,7 +73,7 @@ const Articles = ({
           {articleIds.map(articleId => 
             <Article key={articleId} articleId={articleId}/>
           )}
-          <LoadMore fetch={loadMore} hasMore={moreToFetch}/>
+          {/*<LoadMore fetch={loadMore} hasMore={moreToFetch}/>*/}
         </>
       ):null}
     </div>

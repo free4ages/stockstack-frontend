@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import moment from 'moment';
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
@@ -13,8 +13,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Link from '@material-ui/core/Link';
 
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
-import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
-import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
 import StarIcon from '@material-ui/icons/Star';
 import TurnedInNotIcon from '@material-ui/icons/TurnedInNot';

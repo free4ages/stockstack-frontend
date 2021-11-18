@@ -45,7 +45,7 @@ const Footer = () => {
 
 };
 interface OwnProps{
-  isLoading: boolean
+  isLoading?: boolean
 }
 
 const mapState = (state: RootState) => ({
@@ -61,7 +61,7 @@ type Props = PropsFromRedux & OwnProps;
 
 
 const Auth = ({
-  isLoading
+  isLoading=false
 }:Props) => {
   const classes = useStyles();
   return (

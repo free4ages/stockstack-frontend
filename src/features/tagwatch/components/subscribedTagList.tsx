@@ -6,7 +6,11 @@ import SubscribedTagRow from './subscribedTagRow';
 import {doListSubscribedTags} from 'hooks/tag';
 import {WebSocketContext} from 'components/webSocketProvider';
 import {socketEmit} from 'hooks/socket';
-import {onFetchFeedTagCount,onFetchFeedTagUpdate} from 'hooks/tag';
+import {
+  onFetchFeedTagCount,
+  onFetchFeedTagUpdate,
+  doFetchFeedTagCount,
+} from 'hooks/tag';
 
 interface OwnProps{
   show: boolean;
@@ -24,7 +28,8 @@ const mapDispatch = (dispatch:AppDispatch) => ({
     dispatch(socketEmit('feed:subscribe',{}));
   },
   getFeedTagCounts(){
-    dispatch(socketEmit('feed:counts',{}));
+    //dispatch(socketEmit('feed:counts',{}));
+    dispatch(doFetchFeedTagCount());
   },
   retrievedCounts(data:any){
     dispatch(onFetchFeedTagCount(data));
@@ -56,19 +61,18 @@ const SubscribedTagList = ({
   },[])
   useEffect(()=>{
     if(isLogged){
-      setTimeout(()=>subscribeFeeds(),5000);
-      setTimeout(()=>getFeedTagCounts(),4000);
-    }
-  },[socket,isLogged])
-  useEffect(()=>{
-    if(isLogged){
-      const handle1 = socket.on('feed:counts',(data:any)=>{
-        retrievedCounts(data);
-      }); 
+      //const handle1 = socket.on('feed:counts',(data:any)=>{
+      //  retrievedCounts(data);
+      //}); 
       const handle2 = socket.on('feed:update',(data:any)=>{
         receivedUpdate(data);
       });
-      return () => {handle1();handle2()};
+      const handle3 = socket.on('connect',()=>{
+        setTimeout(()=>subscribeFeeds(),2000);
+        setTimeout(()=>getFeedTagCounts(),1000);
+      });
+      return () => {handle2()};
+      //return () => {handle1();handle2();handle3()};
     }
   },[socket,isLogged])
   return (

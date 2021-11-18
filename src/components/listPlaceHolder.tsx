@@ -1,5 +1,5 @@
+import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
-import React, {useState,useRef,useCallback,useEffect} from 'react';
 const ListPlaceHolder = React.memo(() =>{
   const indexes = [0,1,2,3,4];
   return (

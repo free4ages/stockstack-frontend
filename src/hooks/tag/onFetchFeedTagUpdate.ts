@@ -10,10 +10,11 @@ export interface ITagUpdate{
   tagId: string;
 }
 
-export default (data:ITagUpdate):AppThunk => (dispatch:AppDispatch, getState:() => RootState) =>{
+const onFetchFeedTagUpdate = (data:ITagUpdate):AppThunk => (dispatch:AppDispatch, getState:() => RootState) =>{
   const {tagName,tagId} = data;
   dispatch(updateNewCount([{tagName,delta:1}]));
   dispatch(updateLastUpdated({tagId}));
   dispatch(doArrangeTag());
-}
+};
+export default onFetchFeedTagUpdate;
 

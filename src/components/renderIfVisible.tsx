@@ -19,6 +19,7 @@ const RenderIfVisible = ({
   root = null,
   children
 }: Props) => {
+  let observerRefValue:any = null; 
   const [isVisible, setIsVisible] = useState<boolean>(isServer)
   const placeholderHeight = useRef<number>(defaultHeight)
   const intersectionRef = useRef<HTMLDivElement>(null)
@@ -42,9 +43,10 @@ const RenderIfVisible = ({
         { root, rootMargin: `${visibleOffset}px 0px ${visibleOffset}px 0px` }
       )
       observer.observe(intersectionRef.current)
+      observerRefValue = intersectionRef.current;
       return () => {
-        if (intersectionRef.current) {
-          observer.unobserve(intersectionRef.current)
+        if (observerRefValue) {
+          observer.unobserve(observerRefValue);
         }
       }
     }

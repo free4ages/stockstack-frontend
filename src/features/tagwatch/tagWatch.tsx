@@ -51,7 +51,7 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & OwnProps;
 
-const TagWatch = ({
+const TagWatch = React.memo(({
 }:Props) => {
   const classes = useStyles();
   const [displaySearch,setDisplaySearch] = useState(false);
@@ -85,5 +85,5 @@ const TagWatch = ({
       }
     </>
   );
-};
+});
 export default connector(TagWatch);

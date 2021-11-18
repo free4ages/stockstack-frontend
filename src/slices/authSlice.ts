@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {ILoginParams} from 'services/auth.service';
 
 import {storageSet,storageRemove,storageGet} from 'utils/storage';
 export interface IUser{
@@ -21,7 +20,7 @@ if(userJson){
     user = JSON.parse(userJson);
     console.log('user',user)
     if(!user.email){
-      throw '';
+      throw new Error('Invalid User Json');
     }
     token = storageGet("token","session");
   }catch(err){

@@ -4,7 +4,7 @@ import {IArticleDocument} from 'services/article.service';
 import {markedRead,markedUnRead} from 'slices/articleSlice';
 import {updateNewCount} from 'slices/tagSlice';
 
-export default (article:IArticleDocument,value:boolean): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
+const doToggleRead = (article:IArticleDocument,value:boolean): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
   //const response = await articleService.list(filters);
   if(value){
     dispatch(markedRead({articleId:article.id}));
@@ -23,4 +23,4 @@ export default (article:IArticleDocument,value:boolean): AppThunk => async (disp
   }
 };
 
-
+export default doToggleRead;

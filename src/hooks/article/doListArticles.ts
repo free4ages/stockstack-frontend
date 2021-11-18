@@ -21,7 +21,7 @@ const tranformFilters = (filters:IArticleFilter): IArticleListParams => {
   }
   return transformed;
 }
-export default (filters:any): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
+const doListArticles = (filters:any): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
   const transformedFilter = tranformFilters(filters);
   dispatch(requestedArticleList(transformedFilter));
   const state = getState();
@@ -35,3 +35,5 @@ export default (filters:any): AppThunk => async (dispatch:AppDispatch, getState:
     dispatch(doListArticlesUserInfo(articleIds));
   }
 };
+
+export default doListArticles;

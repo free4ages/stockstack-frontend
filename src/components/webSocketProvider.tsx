@@ -1,7 +1,5 @@
-import React, { createContext,useEffect,useState } from 'react'
+import React, { createContext,useEffect } from 'react'
 import {useAppSelector} from 'app/hooks';
-import io from 'socket.io-client';
-import config from 'config';
 import socketClient from 'app/socketClient';
 const WebSocketContext = createContext<any>(null)
 export { WebSocketContext }

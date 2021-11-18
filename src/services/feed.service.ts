@@ -1,7 +1,8 @@
 import {IDocument,IListParams,IListResponse} from './types';
 import { client } from './client';
 export interface IMarkParams{
-  userFeedId: string;
+  userFeedId?: string;
+  userFeedIds?: string[];
   value: boolean;
 };
 
@@ -15,14 +16,18 @@ export interface IArticleInfo{
   deleted ?: boolean;
 }
 
+
 export interface IFeedListParams extends IListParams{
  readLater ?: boolean;
+ q ?: string;
  recommended ?: boolean;
  isRead ?: boolean;
  important ?: boolean;
  deleted ?: boolean;
  tagNames ?: string | string[];
 }
+
+export type IMarkReadBulk = IFeedListParams & {updateReadLater?:boolean};
 
 export interface IFeedDocument extends IDocument{
   title: string;
@@ -39,10 +44,13 @@ export interface IFeedDocument extends IDocument{
   notesCount?: number;
   important?: boolean;
   isRead?: boolean;
+  isSeen?: boolean;
 };
 
+export type IFeedListResponse = IListResponse<IFeedDocument>;
+
 const list = (params:IFeedListParams)=>{
-  return client.get<IListResponse<IFeedDocument>>('/user-feeds',{params});
+  return client.get<IFeedListResponse>('/user-feeds',{params});
 };
 
 const listInfo = (articleIds:string[]) => {
@@ -51,6 +59,13 @@ const listInfo = (articleIds:string[]) => {
 
 const markRead = (data:IMarkParams) => {
   return client.post('/user-feeds/mark-read',data);
+};
+const markReadBulk = (data:IMarkReadBulk) => {
+  return client.post('/user-feeds/mark-read-bulk',data);
+};
+
+const markSeen = (data:IMarkParams) => {
+  return client.post('/user-feeds/mark-seen',data);
 };
 
 const markReadLater = (data:IMarkParams) => {
@@ -65,12 +80,14 @@ const markDeleted = (data:IMarkParams) => {
   return client.post('/user-feeds/mark-deleted',data);
 };
 
-export default {
+const feedService = {
   list,
   listInfo,
   markRead,
   markReadLater,
   markImportant,
   markDeleted,
+  markReadBulk,
+  markSeen
 };
-
+export default feedService;

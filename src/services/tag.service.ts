@@ -28,11 +28,13 @@ const unsubscribe = (tagId:string)=>{
   return client.post('/tags/unsubscribe',{tagId});
 }
 
-export default {
+const tagService= {
   list,
   search,
   me,
   subscribe,
   unsubscribe
-}
+};
+
+export default tagService;
 

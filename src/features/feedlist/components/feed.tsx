@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect,useRef} from 'react';
 import moment from 'moment';
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
@@ -20,6 +20,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
+import truncate from 'utils/truncate';
 
 import {
   doToggleRead,
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme:Theme) => ({
     color:'#202124',
     padding:16,
     paddingBottom:10,
+    transition: 'background-color 2s',
   },
   heading:{
     whiteSpace:'normal',
@@ -97,15 +99,21 @@ const useStyles = makeStyles((theme:Theme) => ({
   },
   paperRead:{
     opacity:0.4,
+  },
+  paperUnseen:{
+    backgroundColor:'#f1f7e6',
   }
 }));
 
 interface OwnProps{
   feedId: string;
+  readObserver: any;
+  seenObserver: any;
 }
 
 const mapState = (state: RootState,ownProps: OwnProps) => ({
-  feed: state.feeds.loadedFeeds[ownProps.feedId]
+  feed: state.feeds.loadedFeeds[ownProps.feedId],
+  readMode: !!state.feeds.readMode
 });
 
 const mapDispatch = (dispatch:AppDispatch) =>({
@@ -128,17 +136,50 @@ const Feed = ({
   toggleRead,
   toggleImportant,
   toggleReadLater,
+  readObserver,
+  seenObserver,
+  readMode,
 }:Props) => {
   console.log("Rendering feed");
   const classes = useStyles();
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(()=>{
+    const observer = readObserver.current;
+    const observeRef = ref.current;
+    if(observeRef && observer && readMode && !feed.isRead){
+      console.log("Observing feed",feed.title);
+      observer.observe(ref.current);
+      return ()=> observer.unobserve(observeRef);
+    }
+  },[ref.current,readObserver.current,readMode,feed.isRead])
+
+  useEffect(()=>{
+    const observer = seenObserver.current;
+    const observeRef = ref.current;
+    if(observeRef && observer && !feed.isSeen){
+      console.log("Observing feed",feed.title);
+      observer.observe(ref.current);
+      return ()=> observer.unobserve(observeRef);
+    }
+  },[ref.current,seenObserver.current,feed.isSeen])
+
   return (
-    <Paper elevation={0} className={clsx(classes.root,{[classes.paperRead]:feed.isRead})}>
+    <Paper 
+      ref={ref} 
+      data-id={feed.id} 
+      elevation={0} 
+      className={clsx(classes.root,{
+        [classes.paperRead]:feed.isRead,
+        [classes.paperUnseen]:!feed.isSeen
+      })}
+    >
       <div>
         <div className={classes.heading}>
           {feed.title}
         </div>
         <div className={classes.shortText}>
-          {feed.shortText}
+          {truncate(feed.shortText || "",150)}
         </div>
         <div className={classes.bottomText}>
           <div className={classes.timeText}>

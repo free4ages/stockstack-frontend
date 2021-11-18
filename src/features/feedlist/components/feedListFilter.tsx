@@ -12,12 +12,14 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import SearchIcon from "@material-ui/icons/Search";
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import FilterAllIcon from "@material-ui/icons/IndeterminateCheckBox";
 import MarkAllAsReadIcon from "@material-ui/icons/LibraryAddCheck";
 import FilterFavoriteIcon from "@material-ui/icons/Star";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import CheckBoxOutlineBlankOutlinedIcon from '@material-ui/icons/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 import StarIcon from '@material-ui/icons/Star';
 import TurnedInNotIcon from '@material-ui/icons/TurnedInNot';
@@ -25,9 +27,11 @@ import TurnedInIcon from '@material-ui/icons/TurnedIn';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
 import {IFeedFilter} from 'slices/feedSlice';
-import debounce from 'utils/debounce';
-import {changedFilter,setSearchText} from 'slices/feedSlice';
 import SearchBar from 'components/searchBar';
+import debounce from 'utils/debounce';
+
+import {doListFeeds,doSearchFeeds,doMarkReadAll} from 'hooks/feed';
+import {setReadMode} from 'slices/feedSlice';
 
 const useStyles = makeStyles((theme:Theme) => ({
   toolbar: {
@@ -54,7 +58,7 @@ const useStyles = makeStyles((theme:Theme) => ({
   },
   toolEnd:{
     marginRight:30,
-  }
+  },
 }));
 
 interface OwnProps{
@@ -64,16 +68,26 @@ interface OwnProps{
 
 const mapState = (state: RootState) => ({
   filters: state.feeds.filters,
+  readMode: !!state.feeds.readMode,
 });
 
 
 const mapDispatch = (dispatch:AppDispatch) => {
   return {
     changeFilter(filter:IFeedFilter){
-      dispatch(changedFilter(filter));
+      dispatch(doListFeeds({addFilter:filter}));
     },
     search(params:{query:string,all?:boolean}){
-      dispatch(setSearchText(params));
+      dispatch(doSearchFeeds(params));
+    },
+    toggleReadMode(value:boolean){
+      dispatch(setReadMode(value));
+    },
+    markAllRead(){
+      dispatch(doMarkReadAll());
+    },
+    refresh(){
+      dispatch(doListFeeds());
     }
   }
 };
@@ -87,7 +101,11 @@ const FeedListFilter = ({
   setSearchOpen,
   filters,
   changeFilter,
-  search
+  search,
+  readMode,
+  toggleReadMode,
+  refresh,
+  markAllRead,
 }:Props) => {
   const classes = useStyles();
   const [searchAll,setSearchAll] = useState(false);
@@ -148,13 +166,22 @@ const FeedListFilter = ({
             </IconButton>
           </Tooltip>
           <Tooltip title="Mark All As Read">
-            <IconButton className={classes.filterIcon}  onClick={()=>{}}>
+            <IconButton className={classes.filterIcon}  onClick={()=>{markAllRead()}}>
               <MarkAllAsReadIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Refresh">
-            <IconButton className={classes.filterIcon} onClick={()=>{}}>
+            <IconButton className={classes.filterIcon} onClick={()=>{refresh()}}>
               <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={readMode?"Turn Read Mode Off":"Turn Read Mode On"}>
+            <IconButton className={clsx(classes.filterIcon)} onClick={()=>{ toggleReadMode(!readMode)}}>
+              {readMode?(
+                <FiberManualRecordIcon />
+              ):(
+                <RadioButtonCheckedIcon />
+              )}
             </IconButton>
           </Tooltip>
           <Tooltip title="Search">
