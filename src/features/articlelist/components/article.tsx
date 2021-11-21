@@ -147,7 +147,7 @@ const Article = ({
     <Paper elevation={0} className={classes.root}>
       <div>
         <div className={classes.heading}>
-          {article.title}
+          {article.displayTitle || article.title}
         </div>
         {article?.shortText && (
         <div className={classes.shortText}>

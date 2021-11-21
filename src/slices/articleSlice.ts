@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {IArticleDocument,IArticleListResponse,IArticleListParams} from 'services/article.service';
 
 export interface IArticleInfo{
-  _id: string; //feedId
+  _id: string; //articleId
   article: string;
   readLater ?: boolean;
   notesCount ?: number;
@@ -15,9 +15,8 @@ export interface IArticleInfo{
 export interface IArticleFilter{
   q ?: string | null;
   tagName ?: string | null;
-  sortBy ?: 'pubDate:desc' | 'retrieveDate:desc'
+  sortBy ?: 'pubDate:desc' | 'retrieveDate:desc' | 'default';
   hideRead ?: boolean | null;
-  limit ?: number;
 }
 export interface IArticleState{
   articleIds: string[],
@@ -29,8 +28,11 @@ export interface IArticleState{
   fullLoading: boolean;
   moreToFetch: boolean;
   currentPage: number;
+  pageSize ?: number;
   requestedFilter: string;
 }
+
+type IArticleListPayload = IArticleListResponse & {requestedFilter:string,updatedFilter?:IArticleFilter}
 
 const initialState: IArticleState = {
   articleIds: [],
@@ -39,14 +41,14 @@ const initialState: IArticleState = {
   filters: {
     q: null,
     tagName: null,
-    sortBy: 'retrieveDate:desc',
+    sortBy: 'default',
     hideRead: false,
-    limit: 10,
   },
   loading: false,
   moreLoading: false,
   fullLoading: false,
   moreToFetch: true,
+  pageSize:25,
   currentPage: 0,
   requestedFilter: "",
 };
@@ -61,8 +63,8 @@ const articleSlice = createSlice({
     requestedMoreArticleList: (state,action:PayloadAction<IArticleListParams>) => {
       return {...state,moreLoading:true,loading:true,requestedFilter:JSON.stringify(action.payload)};
     },
-    retrievedArticleList: (state,action:PayloadAction<IArticleListResponse& {requestedFilter:string}>)=>{
-      const {results:articles,page=0,requestedFilter} = action.payload;
+    retrievedArticleList: (state,action:PayloadAction<IArticleListPayload>)=>{
+      const {results:articles,page=1,requestedFilter,updatedFilter={}} = action.payload;
       if(requestedFilter !== state.requestedFilter){
         return state;
       } 
@@ -71,19 +73,17 @@ const articleSlice = createSlice({
       articles.forEach(article=> {
         articleMap[article.id] = article;
       });
-      return {
-        ...state,
-        articleIds,
-        loadedArticles: articleMap,
-        loading:false,
-        fullLoading:false,
-        currentPage:page || 0,
-        moreToFetch: !!(articleIds.length>=(state.filters.limit || 50)),
-        requestedFilter:""
-      };
+      state.filters={...updatedFilter};
+      state.articleIds = articleIds;
+      state.loadedArticles = articleMap;
+      state.loading = false;
+      state.fullLoading = false;
+      state.currentPage = page;
+      state.moreToFetch = !!(articleIds.length>=(state.pageSize || initialState.pageSize || 10));
+      state.requestedFilter = "";
     },
-    retrievedMoreArticleList: (state,action: PayloadAction<IArticleListResponse & {requestedFilter:string}>)=> {
-      const {results:articles,page=0,requestedFilter} = action.payload;
+    retrievedMoreArticleList: (state,action: PayloadAction<IArticleListPayload>)=> {
+      const {results:articles,page,requestedFilter} = action.payload;
       if(requestedFilter !== state.requestedFilter){
         return state;
       } 
@@ -100,8 +100,8 @@ const articleSlice = createSlice({
       state.articleIds = newArticleIds;
       state.loading = false;
       state.moreLoading = false;
-      state.currentPage = page || 0;
-      state.moreToFetch= !!(articleIds.length>=(state.filters.limit || 50));
+      state.currentPage = page || 1;
+      state.moreToFetch= !!(articleIds.length>=(state.pageSize || initialState.pageSize || 25));
     },
     retrievedArticleInfo:(state,action:PayloadAction<IArticleInfo[]>)=>{
       const articlesInfo = action.payload;

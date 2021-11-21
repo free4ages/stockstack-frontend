@@ -9,6 +9,7 @@ export interface IMarkParams{
 
 export interface IArticleDocument extends IDocument{
   title: string;
+  displayTitle ?: string;
   shortText?: string;
   fullText?: string;
   pubDate?: Date;

@@ -5,6 +5,7 @@ import {RootState,AppDispatch} from 'app/store';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Article from './article';
 import {doLoadMoreArticles} from 'hooks/article';
+import LoadMore from 'components/loadMore';
 //import RenderIfVisible from 'components/renderIfVisible';
 
 //import LoadMore from 'components/loadMore';
@@ -26,6 +27,8 @@ const useStyles = makeStyles((theme:Theme) => ({
 
 interface OwnProps{
   searchOpen: boolean;
+  showLoadMore: boolean;
+  setLoadMore: (value:boolean) => void;
 }
 
 const mapState = (state: RootState) => ({
@@ -50,20 +53,11 @@ type Props = PropsFromRedux & OwnProps;
 const Articles = ({
   searchOpen,
   articleIds,
+  showLoadMore,
+  setLoadMore,
   fullLoading,
-  moreToFetch,
-  loading,
-  filters,
-  listMoreArticles,
-  currentPage,
 }:Props) => {
   const classes = useStyles();
-  const loadMore = useCallback(()=>{
-      if(!loading){
-        console.log('Loading more articles');
-        listMoreArticles({...filters,page:currentPage+1});
-      }
-  },[loading,listMoreArticles,currentPage,filters]);
   return (
     <div className={clsx(classes.articleContainer,{[classes.articleContainerShifted]:searchOpen})}>
       {fullLoading?(
@@ -73,7 +67,7 @@ const Articles = ({
           {articleIds.map(articleId => 
             <Article key={articleId} articleId={articleId}/>
           )}
-          {/*<LoadMore fetch={loadMore} hasMore={moreToFetch}/>*/}
+          <LoadMore show={showLoadMore} setLoadMore={setLoadMore}/>
         </>
       ):null}
     </div>

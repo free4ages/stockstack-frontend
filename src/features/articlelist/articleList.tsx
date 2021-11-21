@@ -8,13 +8,18 @@ interface OwnProps{
 }
 
 const mapState = (state: RootState) => ({
-  filters: state.articles.filters,
+  showLoadMore: !!(state.articles.articleIds.length && state.articles.moreToFetch),
+  loading : !!state.articles.loading,
+  moreToFetch : !!state.articles.moreToFetch,
 });
 
 const mapDispatch = (dispatch:AppDispatch) => ({
-  listArticles(filters:any){
-    dispatch(doListArticles(filters))
-  }
+  listArticles(){
+    dispatch(doListArticles())
+  },
+  loadMoreArticles(){
+    dispatch(doListArticles({loadMore:true}));
+  },
 });
 
 const connector = connect(mapState, mapDispatch);
@@ -23,15 +28,34 @@ type Props = PropsFromRedux & OwnProps;
 
 const ArticleList = ({
   listArticles,
-  filters,
+  loadMoreArticles,
+  showLoadMore,
+  loading,
+  moreToFetch,
 }:Props) => {
   const [searchOpen,setSearchOpen] = useState(false);
+  const [everLoaded,setEverLoaded] = useState(false);
+  const [loadMore,setLoadMore] = useState(false);
+  useEffect(()=>{ 
+    if(!everLoaded){
+      listArticles();
+    }
+  },[everLoaded,listArticles]);
 
-  useEffect(()=> listArticles(filters),[filters]);
+  useEffect(()=>{
+    if(loadMore && !loading && moreToFetch){
+      loadMoreArticles();
+    }
+  },[loadMore])
+
   return (
     <>
       <ArticleListFilter searchOpen={searchOpen} setSearchOpen={setSearchOpen}/>
-      <Articles searchOpen={searchOpen} />
+      <Articles 
+        searchOpen={searchOpen} 
+        showLoadMore={showLoadMore}
+        setLoadMore={setLoadMore}
+      />
     </>
   );
 }
