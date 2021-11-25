@@ -7,9 +7,8 @@ import {doListSubscribedTags} from 'hooks/tag';
 import {WebSocketContext} from 'components/webSocketProvider';
 import {socketEmit} from 'hooks/socket';
 import {
-  onFetchFeedTagCount,
   onFetchFeedTagUpdate,
-  doFetchFeedTagCount,
+  doSubscribeAllTags,
 } from 'hooks/tag';
 
 interface OwnProps{
@@ -24,15 +23,8 @@ const mapDispatch = (dispatch:AppDispatch) => ({
   fetchTags(){
     dispatch(doListSubscribedTags());
   },
-  subscribeFeeds(){
-    dispatch(socketEmit('feed:subscribe',{}));
-  },
-  getFeedTagCounts(){
-    //dispatch(socketEmit('feed:counts',{}));
-    dispatch(doFetchFeedTagCount());
-  },
-  retrievedCounts(data:any){
-    dispatch(onFetchFeedTagCount(data));
+  subscribeTags(){
+    dispatch(doSubscribeAllTags());
   },
   receivedUpdate(data:any){
     console.log(`Received update for ${data.tagName}`,data);
@@ -49,38 +41,38 @@ const SubscribedTagList = ({
   fetchTags,
   isLogged,
   show,
-  subscribeFeeds,
-  getFeedTagCounts,
-  retrievedCounts,
+  subscribeTags,
   receivedUpdate,
 }:Props)=>{
   const socket = useContext(WebSocketContext);
   const everLoaded = !!itemsCount;
   useEffect(()=>{
       fetchTags();
-  },[])
+  },[isLogged])
   useEffect(()=>{
     if(isLogged){
-      //const handle1 = socket.on('feed:counts',(data:any)=>{
-      //  retrievedCounts(data);
-      //}); 
       const handle2 = socket.on('feed:update',(data:any)=>{
         receivedUpdate(data);
       });
       const handle3 = socket.on('connect',()=>{
-        setTimeout(()=>subscribeFeeds(),2000);
-        setTimeout(()=>getFeedTagCounts(),1000);
+        setTimeout(()=>subscribeTags(),2000);
       });
-      return () => {handle2()};
+      return () => {handle2();handle3()};
       //return () => {handle1();handle2();handle3()};
     }
   },[socket,isLogged])
   return (
     //extra count for taking All tag
     <div style={show?{}:{display:'none'}}>
-    <FixedSizeList height={700} width={299} itemCount={itemsCount+1} itemSize={34}>
-      {SubscribedTagRow}
-    </FixedSizeList>
+      {itemsCount?(
+        <FixedSizeList height={700} width={299} itemCount={itemsCount+1} itemSize={34}>
+          {SubscribedTagRow}
+        </FixedSizeList>
+      ):(
+        <div style={{padding:15}}>
+        <span>Not Subscribed Yet? Search and subscribe to monitor stock, sectors and more</span>
+        </div>
+      )}
     </div>
   )
 }

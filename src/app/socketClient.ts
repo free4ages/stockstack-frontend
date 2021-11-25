@@ -48,11 +48,10 @@ class SocketAPI {
   disconnect(){
     return new Promise((resolve) => {
       if(this.socket){
-        this.socket.disconnect(() => {
-          this.socket = null;
-          this.handlerRegistered=false;
-          resolve(true);
-        });
+        this.socket.disconnect();
+        this.socket = null;
+        this.handlerRegistered=false;
+        resolve(true);
       }
       else{
         resolve(true);

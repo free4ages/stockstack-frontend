@@ -15,7 +15,7 @@ import {SubscribedTagList,PinnedTagList,SearchTagList} from './components';
 
 const useStyles = makeStyles((theme: Theme) =>({
   tab:{
-    minWidth: 125,
+    minWidth: 250,
     //borderRight:"1px solid black",
     borderBottom:"1px solid black" 
   },
@@ -58,7 +58,7 @@ const TagWatch = React.memo(({
   const [selectedTab,setSelectedTab] = useState<number>(0)
 
   const handleChange = (e:any,value:number) => {
-    if(value === 2){
+    if(value === 1){
       setDisplaySearch(true);
     }
     else{
@@ -70,16 +70,27 @@ const TagWatch = React.memo(({
   }
   return (
     <>
-      <Tabs value={selectedTab} variant="fullWidth" className={clsx({[classes.hide]:displaySearch})} onChange={handleChange}>
-        <Tab label={<StyledBadge badgeContent={100} color="secondary"> Topics </StyledBadge>} classes={{root:classes.tab}}/>
-        <Tab label="Pinned (100)" classes={{root:classes.tab}}/>
+      <Tabs 
+        value={selectedTab} 
+        variant="fullWidth" 
+        className={clsx({[classes.hide]:displaySearch})} 
+        onChange={handleChange}
+        TabIndicatorProps={{
+          style: {
+            display: "none",
+          },
+        }}
+      >
+        {/*<Tab label={<StyledBadge badgeContent={100} color="secondary"> Topics </StyledBadge>} classes={{root:classes.tab}}/>*/}
+        <Tab label={"Topics"} classes={{root:classes.tab}}/>
+        {/*<Tab label="Pinned (100)" classes={{root:classes.tab}}/>*/}
         <Tab icon={<SearchIcon/>} aria-label="Item Three" classes={{root:classes.tabSearch}}/>
       </Tabs>
       <Divider />
       <SubscribedTagList show={(selectedTab === 0 && !displaySearch)}/>
-      {selectedTab === 1 && !displaySearch && (
+      {/*{selectedTab === 1 && !displaySearch && (
         <PinnedTagList />
-      )}
+      )}*/}
       {displaySearch &&
         <SearchTagList exitSearch={handleSearchClose} />
       }

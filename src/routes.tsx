@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect,Route,Switch } from "react-router-dom";
-import AuthAPI from "./services/auth";
+import PrivateRoute from 'components/privateRoute';
 import {ArticleList} from './features/articlelist';
 import {FeedList} from './features/feedlist';
 import {Auth} from './features/auth';
@@ -16,11 +16,22 @@ export function RenderRoutes({ routes }:any) {
   return (
     <Switch>
       {routes.map((route:any) => {
-        return <Route 
-          key={route.route}
-          path={route.route} 
-          render = {props => <route.component {...props} />}
-          {...route.routeProps} />;
+        return route.isProtected?(
+          <PrivateRoute 
+            key={route.route}
+            path={route.route} 
+            component={route.component}
+            {...route.routeProps} 
+          />
+
+        ):(
+          <Route 
+            key={route.route}
+            path={route.route} 
+            render = {props => <route.component {...props} />}
+            {...route.routeProps} 
+          />
+        )
       })}
       <Route component={() => <h1>Not Found!</h1>} />
     </Switch>
@@ -32,12 +43,6 @@ const routes = [
     component: RootComponent,
     route: "/",
     routeProps: { exact: true },
-    props: {},
-  },
-  {
-    component: Auth,
-    route: "/auth",
-    routeProps: {},
     props: {},
   },
   {

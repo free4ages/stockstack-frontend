@@ -96,6 +96,12 @@ export default makeStyles((theme: Theme) =>
     },
     headerButton: {
       marginLeft: -48
-    }
+    },
+    closeButton: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      color: theme.palette.grey[500],
+    },
   })
 );

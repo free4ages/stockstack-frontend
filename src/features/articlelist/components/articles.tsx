@@ -4,7 +4,6 @@ import clsx from "clsx";
 import {RootState,AppDispatch} from 'app/store';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Article from './article';
-import {doLoadMoreArticles} from 'hooks/article';
 import LoadMore from 'components/loadMore';
 //import RenderIfVisible from 'components/renderIfVisible';
 
@@ -41,9 +40,6 @@ const mapState = (state: RootState) => ({
 });
 
 const mapDispatch = (dispatch:AppDispatch) => ({
-  listMoreArticles(filters:any){
-    dispatch(doLoadMoreArticles(filters))
-  }
 });
 
 const connector = connect(mapState, mapDispatch);

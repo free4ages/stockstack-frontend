@@ -18,6 +18,7 @@ import useStyles from './tagRowStyle';
 
 import {history} from 'app/history';
 import {doListTagFeeds} from 'hooks/feed';
+import {doListTagArticles} from 'hooks/article';
 
 interface OwnProps{
   index: number;
@@ -26,6 +27,7 @@ interface OwnProps{
 
 const mapState = (state: RootState, ownProps: OwnProps) => {
   let tagId,tag,newCount,isSelected;
+  const isLogged = !!state.auth.user;
   if(ownProps.index>0){
     tagId = state.tags.subscribedIds[ownProps.index-1];
     tag = state.tags.loadedTags[tagId];
@@ -39,14 +41,17 @@ const mapState = (state: RootState, ownProps: OwnProps) => {
   return {
     tag,
     newCount,
-    isSelected
+    isSelected,
+    isLogged,
   }
 };
 
 const mapDispatch = (dispatch:AppDispatch) => ({
-  setSelectedTag(tag:any){
+  setSelectedFeedTag(tag:any){
     dispatch(doListTagFeeds((tag?tag.name:null)));
-    history.push('/feeds');
+  },
+  setSelectedArticleTag(tag:any){
+    dispatch(doListTagArticles(tag?tag.name:null));
   }
 });
 
@@ -60,17 +65,27 @@ const SubscribedTagRow = ({
   tag,
   newCount,
   isSelected,
-  setSelectedTag,
+  setSelectedFeedTag,
+  setSelectedArticleTag,
+  isLogged,
 }:Props) => {
   const classes = useStyles();
   const [toolOpen,setToolOpen] = useState(false); 
+  const handleTagClick= (e:any)=>{
+    if(isLogged){
+      setSelectedFeedTag(tag);
+    }
+    else{
+      setSelectedArticleTag(tag);
+    }
+  }
   return (
     <ListItem button
-      key={`f${index}`}
+      key={`f${tag?tag.id:'all'}`}
       style={style}
       className={classes.feedItem}
       selected={isSelected}
-      onClick={(e) => {setSelectedTag(tag)}}
+      onClick={handleTagClick}
       onMouseEnter={(e)=>{tag && setToolOpen(true);}}
       onMouseLeave={(e)=>{tag && setToolOpen(false);}}
     > 

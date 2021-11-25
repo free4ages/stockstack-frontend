@@ -6,7 +6,7 @@ import doArrangeTag from './doArrangeTag';
 
 
 const doFetchFeedTagCount = (): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
-  const data = await socketClient.request<ITagCount[]>('feed:counts',{});
+  const data = await socketClient.request<ITagCount[]>('tag:counts',{});
   dispatch(retrievedFeedTagCounts(data));
   dispatch(doArrangeTag());
   return data;

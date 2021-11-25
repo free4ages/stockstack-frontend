@@ -4,14 +4,16 @@ import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 
 import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 import useStyles from './components/style';
 
-import {Login} from './components';
+import {Login,SignUp} from './components';
+import {toggleModal} from 'slices/authSlice';
 
 const Header = () => {
   const classes = useStyles();
@@ -22,37 +24,16 @@ const Header = () => {
     </Grid>
   );
 }
-const Footer = () => {
-  const classes = useStyles();
-  return (
-    <>
-      <Grid item className={classes.recoverButton}>
-        <span onClick={(e) => {}}>Forgotten password ?</span>
-      </Grid>
-      {/*<Grid item className={classes.googleButton}>
-        <form method="get" action={``}>
-          <Button variant="contained" type="submit" color="secondary">
-            Login with Google
-          </Button>
-        </form>
-      </Grid>*/}
-      <Grid item className={classes.signupButton}>
-        <span>Don't have an account ?</span>
-        <span className={classes.signupLink} onClick={(e) => {}}>Sign up</span>
-      </Grid>
-    </>
-  );
-
-};
 interface OwnProps{
-  isLoading?: boolean
 }
 
 const mapState = (state: RootState) => ({
-  //isLoading: state.auth.loading,
 });
 
 const mapDispatch = (dispatch:AppDispatch) => ({
+  closeModal(){
+    dispatch(toggleModal(false));
+  }
 });
 
 const connector = connect(mapState, mapDispatch);
@@ -61,26 +42,25 @@ type Props = PropsFromRedux & OwnProps;
 
 
 const Auth = ({
-  isLoading=false
+  closeModal,
 }:Props) => {
   const classes = useStyles();
+  const [active,setActive] = useState('login');
   return (
+    <>
     <Grid container className={classes.loginContainer} direction="column" >
-      <Switch>
-        <Route path="/auth/login" exact={false}>
-          <>
-          {isLoading ? (
-             <Grid item><CircularProgress /></Grid> 
-          ):(
-            <Header />
+          <Header />
+          {active === "login" && (
+            <Login setActive={setActive}/>
           )}
-          <Login />
-
-          <Footer />
-          </>
-        </Route>
-      </Switch>
+          {active === "signup" && (
+            <SignUp setActive={setActive}/>
+          )}
+         <IconButton aria-label="Close" className={classes.closeButton} onClick={()=> {closeModal()}}>
+          <CloseIcon />
+        </IconButton>
     </Grid>
+    </>
   );
 }
 

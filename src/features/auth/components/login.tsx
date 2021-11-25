@@ -10,11 +10,36 @@ import useStyles from './style';
 
 import {doLogin} from 'hooks/auth';
 
+const Footer = () => {
+  const classes = useStyles();
+  return (
+    <>
+      {/*<Grid item className={classes.recoverButton}>
+        <span onClick={(e) => {}}>Forgotten password ?</span>
+      </Grid>*/}
+      {/*<Grid item className={classes.googleButton}>
+        <form method="get" action={``}>
+          <Button variant="contained" type="submit" color="secondary">
+            Login with Google
+          </Button>
+        </form>
+      </Grid>*/}
+      <Grid item className={classes.signupButton}>
+        <span>Don't have an account ?</span>
+        <span className={classes.signupLink} onClick={(e) => {}}>Sign up</span>
+      </Grid>
+    </>
+  );
+
+};
+
 interface OwnProps{
+  setActive: (value:string) => void;
 }
 
 const mapState = (state: RootState) => ({
   isLoading: state.auth.loading,
+  error: state.auth.error
 });
 
 const mapDispatch = (dispatch:AppDispatch) => ({
@@ -32,12 +57,15 @@ type Props = PropsFromRedux & OwnProps;
 
 const Login = ({
   logIn,
-  isLoading
+  isLoading,
+  setActive,
+  error
 }:Props)=> {
   console.log("Rendering Login");
   //const isLoading=false;
   const classes = useStyles();
   return (
+    <>
     <form onSubmit={logIn} className={classes.loginForm}>
       <Grid item>
         <TextField required id="ss-email" label="Email"
@@ -56,12 +84,22 @@ const Login = ({
           //helperText={passwordError}
         />
       </Grid>
+      {error && (
+        <Grid item>
+          <span style={{color:'red'}}>{error}</span>
+        </Grid>
+      )}
       <Grid item className={classes.loginButton}>
         <Button variant="contained" type="submit" color="primary">
           Login
         </Button>
       </Grid>
+      <Grid item className={classes.signupButton}>
+        <span>Don't have an account ?</span>
+        <span className={classes.signupLink} onClick={(e) => {setActive('signup')}}>Sign up</span>
+      </Grid>
     </form>
+    </>
   );
 };
 

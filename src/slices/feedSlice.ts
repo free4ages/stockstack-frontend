@@ -9,7 +9,7 @@ export interface IFeedFilter{
   showReadLater ?: boolean | null;
   q ?: string | null;
   tagName ?: string | null;
-  sortBy ?: 'pubDate:desc' | 'retrieveDate:desc'
+  sortBy ?: 'pubDate:desc' | 'retrieveDate:desc' | 'default'
 }
 export interface IFeedState{
   feedIds: string[];
@@ -36,7 +36,7 @@ const initialState: IFeedState = {
     showReadLater: null,
     tagName: null,
     q: null,
-    sortBy: 'retrieveDate:desc',
+    sortBy: 'default',
   },
   loading: false,
   moreLoading: false,

@@ -4,6 +4,7 @@ import doArrangeTag from './doArrangeTag';
 import onFetchFeedTagCount from './onFetchFeedTagCount';
 import onFetchFeedTagUpdate from './onFetchFeedTagUpdate';
 import doFetchFeedTagCount from './doFetchFeedTagCount';
+import doSubscribeAllTags from './doSubscribeAllTags';
 
 export {
   doListSubscribedTags,
@@ -11,5 +12,6 @@ export {
   doArrangeTag,
   onFetchFeedTagCount,
   onFetchFeedTagUpdate,
-  doFetchFeedTagCount
+  doFetchFeedTagCount,
+  doSubscribeAllTags
 };

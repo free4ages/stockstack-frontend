@@ -2,6 +2,7 @@ import {AppDispatch,AppThunk,RootState} from 'app/store';
 import {history} from 'app/history';
 import {IFeedFilter} from 'slices/feedSlice';
 import doListFeeds from './doListFeeds';
+import getActivePage from 'app/getActivePage';
 import {changedFilter} from 'slices/feedSlice';
 
 const doListTagFeeds = (tagName:string): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
@@ -10,8 +11,7 @@ const doListTagFeeds = (tagName:string): AppThunk => async (dispatch:AppDispatch
   addFilter.showImportant = null;
   addFilter.showReadLater = null;
   addFilter.q = null;
-  const feedPageActive = !!(window.location.pathname==="/feeds");
-  if(feedPageActive){
+  if(getActivePage()==='feeds'){
     dispatch(doListFeeds({addFilter}));
   }
   else{

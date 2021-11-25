@@ -1,12 +1,15 @@
 import React,{useState} from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import useStyles from "./threeColumnLayoutStyle";
+
 import {TogglePanelButton} from './togglePanelButton';
-import {TagWatch} from 'features/tagwatch';
 
 import {TopMenu} from './topMenu';
 import {RightPanel} from "./rightPanel";
 import {LeftPanel} from "./leftPanel";
+import {TagWatch} from 'features/tagwatch';
+
+import {AuthModal} from 'features/auth';
 
 const ThreeColumnLayout = ({
   children,
@@ -29,6 +32,7 @@ const ThreeColumnLayout = ({
         {children}
       </main>
       <RightPanel />
+      <AuthModal />
     </div>
   );
 };
