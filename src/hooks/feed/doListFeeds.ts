@@ -1,5 +1,4 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
-import {IFeedListParams} from 'services/feed.service';
 import {IFeedFilter} from 'slices/feedSlice';
 import feedService from 'services/feed.service';
 import {

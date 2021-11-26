@@ -123,7 +123,6 @@ class SocketAPI {
     if(!this.socket){
       throw new Error(`Cannot register ${path} as socket is not connected yet`);
     }
-    const socket = this.socket;
     return new Promise((resolve,reject) => {
       const callback = (data:any) => {
         resolve(data);

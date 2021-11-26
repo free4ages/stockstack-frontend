@@ -1,4 +1,4 @@
 const config =  {
-  webSocketUrl: 'http://localhost:3006',
+  webSocketUrl: 'http://socket.stockheap.com',
 };
 export default config;

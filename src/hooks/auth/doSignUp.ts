@@ -1,17 +1,16 @@
-import {AppDispatch,AppThunk,RootState} from 'app/store';
+import {AppDispatch,AppThunk} from 'app/store';
 import {IRegisterParams} from 'services/auth.service';
 import authService from 'services/auth.service';
-import {history} from 'app/history';
 
 import {
   requestSent,
-  loginFailed,
+  //loginFailed,
   authError,
   tokenAcquired,
   toggleModal,
 } from 'slices/authSlice';
 
-export default (params:IRegisterParams): AppThunk => async (dispatch: AppDispatch) => {
+const doSignUp =  (params:IRegisterParams): AppThunk => async (dispatch: AppDispatch) => {
   dispatch(requestSent());
   //dispatch(attemptLogin(params));
   try{
@@ -24,4 +23,4 @@ export default (params:IRegisterParams): AppThunk => async (dispatch: AppDispatc
   };
 };
 
-
+export default doSignUp;

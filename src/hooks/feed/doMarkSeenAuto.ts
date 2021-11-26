@@ -1,7 +1,6 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
 import {markedSeen} from 'slices/feedSlice';
 import feedService from 'services/feed.service';
-import {IFeedDocument} from 'services/feed.service';
 import {doShowAuthAlert,checkLogin} from 'hooks/auth';
 
 let _queue:string[] = []; 
@@ -35,8 +34,6 @@ const doMarkSeenAuto = (feedId:string): AppThunk => async (dispatch:AppDispatch,
     return;
   }
 
-  const state = getState();
-  const feed = state.feeds.loadedFeeds[feedId];
   dispatch(markedSeen({feedId:feedId}))
   scheduleMarkSeen(feedId);
 }

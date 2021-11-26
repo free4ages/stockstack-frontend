@@ -1,8 +1,7 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
-import {markedRead,markedUnRead} from 'slices/feedSlice';
+import {markedRead} from 'slices/feedSlice';
 import feedService from 'services/feed.service';
 import {updateNewCount} from 'slices/tagSlice';
-import {IFeedDocument} from 'services/feed.service';
 import {doShowAuthAlert,checkLogin} from 'hooks/auth';
 
 let _queue:string[] = []; 

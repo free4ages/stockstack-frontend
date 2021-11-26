@@ -1,4 +1,4 @@
-import React, {useState,useEffect,useRef} from 'react';
+import React, {useEffect,useRef} from 'react';
 import ReactTimeAgo from 'react-time-ago'
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
@@ -18,7 +18,6 @@ import TurnedInNotIcon from '@material-ui/icons/TurnedInNot';
 import TurnedInIcon from '@material-ui/icons/TurnedIn';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
 import truncate from 'utils/truncate';
@@ -149,7 +148,7 @@ const Feed = ({
     const observer = readObserver.current;
     const observeRef = ref.current;
     if(observeRef && observer && readMode && !feed.isRead){
-      console.log("Observing feed",feed.title);
+      //console.log("Observing feed",feed.title);
       observer.observe(ref.current);
       return ()=> observer.unobserve(observeRef);
     }
@@ -159,7 +158,7 @@ const Feed = ({
     const observer = seenObserver.current;
     const observeRef = ref.current;
     if(observeRef && observer && !feed.isSeen){
-      console.log("Observing feed",feed.title);
+      //console.log("Observing feed",feed.title);
       observer.observe(ref.current);
       return ()=> observer.unobserve(observeRef);
     }
@@ -187,6 +186,7 @@ const Feed = ({
             {feed.pubDate && (
             <ReactTimeAgo date={new Date(feed.pubDate)} locale="en-US" timeStyle="round-minute"/>
             )}
+            {` [ ${feed.sourceDomain} ]`}
           </div>
           {(feed.tags && feed.tags.length)? (
           <div className={classes.tagChips}>

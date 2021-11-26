@@ -1,7 +1,6 @@
-import {AppDispatch,AppThunk,RootState} from 'app/store';
+import {AppDispatch,AppThunk} from 'app/store';
 import {ILoginParams} from 'services/auth.service';
 import authService from 'services/auth.service';
-import {history} from 'app/history';
 
 import {
   requestSent,
@@ -11,7 +10,7 @@ import {
   toggleModal,
 } from 'slices/authSlice';
 
-export default (params:ILoginParams): AppThunk => async (dispatch: AppDispatch) => {
+const doLogin = (params:ILoginParams): AppThunk => async (dispatch: AppDispatch) => {
   dispatch(requestSent());
   //dispatch(attemptLogin(params));
   try{
@@ -24,4 +23,4 @@ export default (params:ILoginParams): AppThunk => async (dispatch: AppDispatch) 
      dispatch(authError(err.data.message || 'An Error Occured'));
   };
 };
-
+export default doLogin;

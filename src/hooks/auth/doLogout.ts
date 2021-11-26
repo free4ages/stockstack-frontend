@@ -1,4 +1,4 @@
-import {AppDispatch,AppThunk,RootState} from 'app/store';
+import {AppDispatch,AppThunk} from 'app/store';
 
 import {logout} from 'slices/authSlice';
 import socketClient from 'app/socketClient';

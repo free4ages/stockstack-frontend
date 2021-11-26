@@ -1,17 +1,17 @@
-import React, {useEffect,useState} from 'react';
+import React, {useState} from 'react';
 import clsx from "clsx"
-import { makeStyles, Theme, withStyles, createStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Badge from "@material-ui/core/Badge";
+//import Badge from "@material-ui/core/Badge";
 
 import Divider from "@material-ui/core/Divider";
 import SearchIcon from "@material-ui/icons/Search";
 
-import {SubscribedTagList,PinnedTagList,SearchTagList} from './components';
+import {SubscribedTagList,SearchTagList} from './components';
 
 const useStyles = makeStyles((theme: Theme) =>({
   tab:{
@@ -28,16 +28,16 @@ const useStyles = makeStyles((theme: Theme) =>({
   }
 }));
 
-const StyledBadge = withStyles((theme: Theme) =>
-  createStyles({
-    badge: {
-      right: -7,
-      top: 13,
-      border: `2px solid ${theme.palette.background.paper}`,
-      padding: '0 4px',
-    },
-  }),
-)(Badge);
+//const StyledBadge = withStyles((theme: Theme) =>
+//  createStyles({
+//    badge: {
+//      right: -7,
+//      top: 13,
+//      border: `2px solid ${theme.palette.background.paper}`,
+//      padding: '0 4px',
+//    },
+//  }),
+//)(Badge);
 
 interface OwnProps{
 }

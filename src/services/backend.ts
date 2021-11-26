@@ -13,7 +13,7 @@ const BackendAPI = {
     let url;
     switch (env) {
       case 'PROD':
-        url = 'http://localhost';
+        url = 'http://api.stockheap.com/v1';
         break;
       default:
         url = 'http://localhost:3000/v1';

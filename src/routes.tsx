@@ -3,7 +3,6 @@ import { Redirect,Route,Switch } from "react-router-dom";
 import PrivateRoute from 'components/privateRoute';
 import {ArticleList} from './features/articlelist';
 import {FeedList} from './features/feedlist';
-import {Auth} from './features/auth';
 //import layouts from 'features/layouts';
 import {useAppSelector} from 'app/hooks';
 const RootComponent = () => {

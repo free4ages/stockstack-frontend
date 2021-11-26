@@ -53,6 +53,7 @@ const ArticleList = ({
   useEffect(()=>{ 
     if(!everLoaded){
       listArticles();
+      setEverLoaded(true);
     }
   },[everLoaded,listArticles]);
 

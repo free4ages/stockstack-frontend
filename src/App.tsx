@@ -1,18 +1,15 @@
 import React from 'react';
-import { Redirect,Route, Switch,Router} from "react-router-dom";
-import {useAppSelector} from 'app/hooks';
+import { Router} from "react-router-dom";
 import { ThemeProvider } from "@material-ui/styles";
 //import {DetectAppIcon} from '@lipihipi/ec-student-web';
 //import './app.scss';
 //import '@lipihipi/theme';
 //import config from './config'
-import { ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+//import 'react-toastify/dist/ReactToastify.css';
 import {defaultTheme} from './theme';
 import {history} from 'app/history';
 import WebSocketProvider from 'components/webSocketProvider';
 import ThreeColumnLayout from 'features/layouts/threeColumnLayout';
-import {ArticleList} from './features/articlelist';
 
 import routes,{RenderRoutes} from "./routes";
 

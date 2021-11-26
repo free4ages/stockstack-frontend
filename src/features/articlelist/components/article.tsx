@@ -169,6 +169,7 @@ const Article = ({
             {article.pubDate && (
             <ReactTimeAgo date={new Date(article.pubDate)} locale="en-US" timeStyle="round-minute"/>
             )}
+            {` [ ${article.sourceDomain} ]`}
           </div>
           {(article.tags && article.tags.length)? (
           <div className={classes.tagChips}>

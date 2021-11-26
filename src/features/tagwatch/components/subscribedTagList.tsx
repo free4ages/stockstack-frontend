@@ -1,11 +1,10 @@
-import React, {useEffect,useState,useContext} from 'react';
+import React, {useEffect,useContext} from 'react';
 import { FixedSizeList } from "react-window";
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 import SubscribedTagRow from './subscribedTagRow';
 import {doListSubscribedTags} from 'hooks/tag';
 import {WebSocketContext} from 'components/webSocketProvider';
-import {socketEmit} from 'hooks/socket';
 import {
   onFetchFeedTagUpdate,
   doSubscribeAllTags,
@@ -45,7 +44,6 @@ const SubscribedTagList = ({
   receivedUpdate,
 }:Props)=>{
   const socket = useContext(WebSocketContext);
-  const everLoaded = !!itemsCount;
   useEffect(()=>{
       fetchTags();
   },[isLogged])

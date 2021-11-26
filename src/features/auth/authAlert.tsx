@@ -1,7 +1,6 @@
-import React,{useState} from 'react';
+import React from 'react';
 import {RootState,AppDispatch} from 'app/store';
 import { ConnectedProps,connect } from 'react-redux'
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -40,7 +39,6 @@ const AuthAlert = ({
   alertInfo,
   resetAlert,
 }:Props)=> {
-  const classes = useStyles();
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {

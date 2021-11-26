@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from 'react';
+import React, {useState} from 'react';
 import ReactTimeAgo from 'react-time-ago'
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
@@ -11,7 +11,6 @@ import IconButton from "@material-ui/core/IconButton";
 
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 
 import useStyles from './tagRowStyle';

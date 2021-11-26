@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from 'react';
+import React from 'react';
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 
@@ -10,28 +10,28 @@ import useStyles from './style';
 
 import {doLogin} from 'hooks/auth';
 
-const Footer = () => {
-  const classes = useStyles();
-  return (
-    <>
-      {/*<Grid item className={classes.recoverButton}>
-        <span onClick={(e) => {}}>Forgotten password ?</span>
-      </Grid>*/}
-      {/*<Grid item className={classes.googleButton}>
-        <form method="get" action={``}>
-          <Button variant="contained" type="submit" color="secondary">
-            Login with Google
-          </Button>
-        </form>
-      </Grid>*/}
-      <Grid item className={classes.signupButton}>
-        <span>Don't have an account ?</span>
-        <span className={classes.signupLink} onClick={(e) => {}}>Sign up</span>
-      </Grid>
-    </>
-  );
-
-};
+//const Footer = () => {
+//  const classes = useStyles();
+//  return (
+//    <>
+//      {/*<Grid item className={classes.recoverButton}>
+//        <span onClick={(e) => {}}>Forgotten password ?</span>
+//      </Grid>*/}
+//      {/*<Grid item className={classes.googleButton}>
+//        <form method="get" action={``}>
+//          <Button variant="contained" type="submit" color="secondary">
+//            Login with Google
+//          </Button>
+//        </form>
+//      </Grid>*/}
+//      <Grid item className={classes.signupButton}>
+//        <span>Don't have an account ?</span>
+//        <span className={classes.signupLink} onClick={(e) => {}}>Sign up</span>
+//      </Grid>
+//    </>
+//  );
+//
+//};
 
 interface OwnProps{
   setActive: (value:string) => void;

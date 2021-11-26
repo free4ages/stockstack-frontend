@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from 'react';
+import React from 'react';
 import { FixedSizeList } from "react-window";
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
@@ -16,7 +16,7 @@ const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & OwnProps;
 
-const PinnedTagList = ()=>{
+const PinnedTagList = ({}:Props)=>{
   return (
     <FixedSizeList height={1000} width={299} itemCount={500} itemSize={34}>
       {PinnedTagRow}

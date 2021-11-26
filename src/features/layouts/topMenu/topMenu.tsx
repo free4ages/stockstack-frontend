@@ -15,8 +15,8 @@ import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import SettingsIcon from "@material-ui/icons/Settings";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+//import SettingsIcon from "@material-ui/icons/Settings";
+//import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 import topMenuStyle from "./topMenuStyle";
 

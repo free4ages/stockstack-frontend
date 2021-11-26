@@ -1,4 +1,4 @@
-import React, {useRef,useCallback,useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { SpinnerInfinity } from 'spinners-react';
 import { useInView } from 'react-intersection-observer';
@@ -13,7 +13,7 @@ const useLoaderStyles = makeStyles((theme:Theme) => ({
 const LoadMore = React.memo(({setLoadMore,show=true}:any) => {
   console.log('rendering loader');
   const classes = useLoaderStyles();  
-  const { ref, inView, entry } = useInView({
+  const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
   });

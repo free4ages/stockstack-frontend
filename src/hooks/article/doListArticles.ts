@@ -1,6 +1,6 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
 import articleService from 'services/article.service';
-import {IArticleListParams,IArticleDocument} from 'services/article.service';
+import {IArticleDocument} from 'services/article.service';
 import {IArticleFilter} from 'slices/articleSlice';
 import doListArticlesUserInfo from './doListArticlesUserInfo';
 import {transformFilters} from './utils';

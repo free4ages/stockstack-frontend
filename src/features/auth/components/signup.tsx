@@ -1,11 +1,8 @@
-import React, {useEffect,useState} from 'react';
+import React, {useState} from 'react';
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 
 import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
@@ -65,7 +62,6 @@ const SignUp = ({
     passwordConf:"",
     email:"",
   })
-  const [pwdType, setPwdType] = useState("password");
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
@@ -113,7 +109,7 @@ const SignUp = ({
         />
       </Grid>
       <Grid item>
-        <TextField required label="Password" type={pwdType}
+        <TextField required label="Password" type="password"
           className={classes.loginInput}
           disabled={isLoading} error={!!errors.password}
           helperText={errors.password || ""}
@@ -121,7 +117,7 @@ const SignUp = ({
         />
       </Grid>
       <Grid item>
-        <TextField required label="Confirm Password" type={pwdType}
+        <TextField required label="Confirm Password" type="password"
           className={classes.loginInput}
           disabled={isLoading} error={!!errors.passwordConf}
           helperText={errors.passwordConf || ""}

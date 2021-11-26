@@ -3,7 +3,6 @@ import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 import {Feeds,FeedListFilter} from './components';
 import {doListFeeds,doMarkReadAuto,doMarkSeenAuto} from 'hooks/feed';
-import LoadMore from 'components/loadMore';
 
 interface OwnProps{
 }
@@ -54,6 +53,7 @@ const FeedList = ({
   useEffect(()=>{ 
     if(!everLoaded){
       listFeeds();
+      setEverLoaded(true);
     }
   },[everLoaded,listFeeds]);
 

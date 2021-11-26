@@ -1,5 +1,4 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
-import {ITagCount} from 'slices/tagSlice';
 import {updateNewCount,updateLastUpdated} from 'slices/tagSlice';
 import doArrangeTag from './doArrangeTag';
 import {doFetchArticleFeed} from 'hooks/feed';

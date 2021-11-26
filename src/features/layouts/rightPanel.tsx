@@ -6,7 +6,6 @@ import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Close from "@material-ui/icons/Close";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 import rightPanelStyle from "./rightPanelStyle";
 

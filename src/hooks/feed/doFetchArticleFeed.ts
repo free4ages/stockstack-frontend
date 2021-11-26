@@ -1,5 +1,5 @@
 import {AppDispatch,AppThunk,RootState} from 'app/store';
-import feedService,{IFeedListResponse} from 'services/feed.service';
+import feedService from 'services/feed.service';
 import shallowEqual from 'utils/shallowEqual';
 import getActivePage from 'app/getActivePage';
 import {retrievedNewFeedList} from 'slices/feedSlice';

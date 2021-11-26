@@ -13,10 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import SearchIcon from "@material-ui/icons/Search";
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
-import FilterAllIcon from "@material-ui/icons/IndeterminateCheckBox";
 import MarkAllAsReadIcon from "@material-ui/icons/LibraryAddCheck";
-import FilterFavoriteIcon from "@material-ui/icons/Star";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import CheckBoxOutlineBlankOutlinedIcon from '@material-ui/icons/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
@@ -28,7 +25,6 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 
 import {IFeedFilter} from 'slices/feedSlice';
 import SearchBar from 'components/searchBar';
-import debounce from 'utils/debounce';
 
 import {doListFeeds,doSearchFeeds,doMarkReadAll} from 'hooks/feed';
 import {setReadMode} from 'slices/feedSlice';

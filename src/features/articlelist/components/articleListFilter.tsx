@@ -17,7 +17,7 @@ import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 
 import {IArticleFilter} from 'slices/articleSlice';
 import SearchBar from 'components/searchBar';
-import {changedFilter,setSearchText} from 'slices/articleSlice';
+import {changedFilter} from 'slices/articleSlice';
 import {doSearchArticles} from 'hooks/article';
 
 const useStyles = makeStyles((theme:Theme) => ({

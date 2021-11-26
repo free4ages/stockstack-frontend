@@ -4,7 +4,6 @@ import getActivePage from 'app/getActivePage';
 import {retrievedNewArticle} from 'slices/articleSlice';
 
 const onFetchNewArticle = (article:IArticleDocument):AppThunk => (dispatch:AppDispatch,getState:()=>RootState) =>{
-  const state = getState();
   if(getActivePage()!=="articles") return;
   dispatch(retrievedNewArticle(article));
 };
