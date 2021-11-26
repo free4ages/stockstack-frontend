@@ -7,12 +7,18 @@ export interface IUser{
   email: string;
   name?: string;
 }
+type Severity = "error" | "success" | "info" | "warning" | undefined;
+export interface IAlert{
+  message: string;
+  type?: Severity;
+}
 export interface AuthState{
   modalOpen: boolean,
   loading: boolean;
   error: any;
   token: string | null;
   user: IUser | null;
+  authAlert: IAlert | null;
 }
 
 const userJson = storageGet("user",STORAGE_TYPE);
@@ -37,6 +43,7 @@ const initialState:AuthState = {
   loading:false,
   error: null,
   modalOpen:false,
+  authAlert: null,
 }
 const authSlice = createSlice({
   name: 'auth',
@@ -66,6 +73,12 @@ const authSlice = createSlice({
     toggleModal: (state,action:PayloadAction<boolean>) => {
       state.modalOpen = action.payload;
     },
+    resetAlert:(state) => {
+      state.authAlert = null;
+    },
+    showAlert:(state,action:PayloadAction<IAlert>) => {
+      state.authAlert = action.payload;
+    }
   }
 });
 
@@ -75,7 +88,9 @@ export const {
   logout,
   authError,
   requestSent,
-  toggleModal
+  toggleModal,
+  showAlert,
+  resetAlert,
 } = authSlice.actions;
 
 export default authSlice.reducer;

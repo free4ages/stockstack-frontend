@@ -117,6 +117,17 @@ const articleSlice = createSlice({
         state.articlesInfo[info.article] = info;
       });
     },
+    retrievedNewArticle:(state,action:PayloadAction<IArticleDocument>)=>{
+      const article = action.payload;
+      const activeTag = state.filters.tagName;
+      if(state.filters.q) return state;
+      if(!activeTag || (article.tags && article.tags.length && article.tags.indexOf(activeTag)!==-1)){
+        state.loadedArticles[article.id] = article; 
+        if(state.articleIds.indexOf(article.id)===-1){
+          state.articleIds.unshift(article.id);
+        }
+      }
+    },
     changedFilter: (state,action:PayloadAction<IArticleFilter>) => {
       state.filters = {...state.filters,...action.payload}
     },
@@ -182,6 +193,7 @@ export const {
   markedUnImportant,
   markedReadLater,
   removedReadLater,
+  retrievedNewArticle,
 } = articleSlice.actions;
 
 export default articleSlice.reducer;

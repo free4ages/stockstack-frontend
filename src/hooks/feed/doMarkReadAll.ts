@@ -6,8 +6,13 @@ import {updateNewCount} from 'slices/tagSlice';
 import {transformFilters} from './utils';
 import {doFetchFeedTagCount} from 'hooks/tag';
 import doListFeeds from './doListFeeds';
+import {doShowAuthAlert,checkLogin} from 'hooks/auth';
 
 const doMarkReadAll = (): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
+  if(!checkLogin(getState())){
+    dispatch(doShowAuthAlert({message:"Please login to mark read"}))
+    return;
+  }
   const state = getState();
   const filters = {...state.feeds.filters};
   const transformedFilter = transformFilters(filters);

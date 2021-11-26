@@ -195,7 +195,7 @@ const FeedListFilter = ({
         <SearchBar
           value={filters.q || ""}
           endAdornment={<InputAdornment position="end">
-            <Tooltip title="Search All Feed">
+            <Tooltip title="Search All Feeds">
               <Checkbox onChange={(e)=> setSearchAll(e.target.checked)} />
             </Tooltip>
           </InputAdornment>}

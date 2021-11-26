@@ -7,10 +7,12 @@ import doToggleReadLater from './doToggleReadLater';
 import doMarkReadAuto from './doMarkReadAuto';
 import doMarkSeenAuto from './doMarkSeenAuto';
 import doMarkReadAll from './doMarkReadAll';
+import doFetchArticleFeed from './doFetchArticleFeed';
 
 export {
   doListFeeds,
   doSearchFeeds,
+  doFetchArticleFeed,
   doToggleRead,
   doToggleImportant,
   doToggleReadLater,

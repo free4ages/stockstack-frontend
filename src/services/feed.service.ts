@@ -57,6 +57,10 @@ const listInfo = (articleIds:string[]) => {
   return client.post('/user-feeds/info',{articleIds});
 }
 
+const listByArticleIds = (articleIds:string[]) => {
+  return client.post('/user-feeds/article-feeds',{articleIds});
+}
+
 const markRead = (data:IMarkParams) => {
   return client.post('/user-feeds/mark-read',data);
 };
@@ -83,6 +87,7 @@ const markDeleted = (data:IMarkParams) => {
 const feedService = {
   list,
   listInfo,
+  listByArticleIds,
   markRead,
   markReadLater,
   markImportant,

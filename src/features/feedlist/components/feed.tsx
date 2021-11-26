@@ -1,5 +1,5 @@
 import React, {useState,useEffect,useRef} from 'react';
-import moment from 'moment';
+import ReactTimeAgo from 'react-time-ago'
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 import {IFeedDocument} from 'services/feed.service';
@@ -19,6 +19,7 @@ import TurnedInIcon from '@material-ui/icons/TurnedIn';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
 import truncate from 'utils/truncate';
 
@@ -183,7 +184,9 @@ const Feed = ({
         </div>
         <div className={classes.bottomText}>
           <div className={classes.timeText}>
-            <span>{moment(feed.pubDate).fromNow()}  [ {feed.sourceDomain} ]</span>
+            {feed.pubDate && (
+            <ReactTimeAgo date={new Date(feed.pubDate)} locale="en-US" timeStyle="round-minute"/>
+            )}
           </div>
           {(feed.tags && feed.tags.length)? (
           <div className={classes.tagChips}>
@@ -225,11 +228,20 @@ const Feed = ({
               )}
             </IconButton>
           </Tooltip>
+          {feed.link && (
           <Tooltip title="Open Link">
             <Link classes={{root:classes.actionButton}} className={clsx(classes.actionButtonActive)} href={feed.link} target="_blank">
               <LaunchOutlinedIcon />
             </Link>
           </Tooltip>
+          )}
+          {feed.attachmentLink && (
+          <Tooltip title="Open Link">
+            <Link classes={{root:classes.actionButton}} className={clsx(classes.actionButtonActive)} href={feed.attachmentLink} target="_blank">
+              <DescriptionOutlinedIcon />
+            </Link>
+          </Tooltip>
+          )}
           </div>
         </div>
       </div>

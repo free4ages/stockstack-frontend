@@ -4,6 +4,9 @@ import doToggleRead from './doToggleRead';
 import doToggleImportant from './doToggleImportant';
 import doToggleReadLater from './doToggleReadLater';
 import doListTagArticles from './doListTagArticles';
+import doSearchArticles from './doSearchArticles';
+import doSubscribeNewArticle from './doSubscribeNewArticle';
+import onFetchNewArticle from './onFetchNewArticle';
 
 export {
   doListArticles,
@@ -11,5 +14,8 @@ export {
   doToggleRead,
   doToggleImportant,
   doToggleReadLater,
-  doListTagArticles
+  doListTagArticles,
+  doSearchArticles,
+  doSubscribeNewArticle,
+  onFetchNewArticle,
 };

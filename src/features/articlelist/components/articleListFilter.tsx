@@ -18,6 +18,7 @@ import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import {IArticleFilter} from 'slices/articleSlice';
 import SearchBar from 'components/searchBar';
 import {changedFilter,setSearchText} from 'slices/articleSlice';
+import {doSearchArticles} from 'hooks/article';
 
 const useStyles = makeStyles((theme:Theme) => ({
   toolbar: {
@@ -62,7 +63,7 @@ const mapDispatch = (dispatch:AppDispatch) => {
       dispatch(changedFilter(filter));
     },
     search(params:{query:string,all?:boolean}){
-      dispatch(setSearchText(params));
+      dispatch(doSearchArticles(params));
     }
   }
 };
@@ -117,7 +118,7 @@ const ArticleListFilter = ({
         <SearchBar
           value={filters.q || ""}
           endAdornment={<InputAdornment position="end">
-            <Tooltip title="Search All Feed">
+            <Tooltip title="Search All Articles">
               <Checkbox onChange={(e)=> setSearchAll(e.target.checked)} />
             </Tooltip>
           </InputAdornment>}

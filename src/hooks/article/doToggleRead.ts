@@ -3,8 +3,13 @@ import articleService from 'services/article.service';
 import {IArticleDocument} from 'services/article.service';
 import {markedRead,markedUnRead} from 'slices/articleSlice';
 import {updateNewCount} from 'slices/tagSlice';
+import {doShowAuthAlert,checkLogin} from 'hooks/auth';
 
 const doToggleRead = (article:IArticleDocument,value:boolean): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
+  if(!checkLogin(getState())){
+    dispatch(doShowAuthAlert({message:"Please login to mark read."}))
+    return;
+  }
   //const response = await articleService.list(filters);
   if(value){
     dispatch(markedRead({articleId:article.id}));

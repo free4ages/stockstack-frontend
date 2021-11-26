@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import ReactTimeAgo from 'react-time-ago'
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 import {IArticleDocument} from 'services/article.service';
@@ -19,6 +19,8 @@ import TurnedInNotIcon from '@material-ui/icons/TurnedInNot';
 import TurnedInIcon from '@material-ui/icons/TurnedIn';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+
 
 import truncate from 'utils/truncate';
 
@@ -95,7 +97,10 @@ const useStyles = makeStyles((theme:Theme) => ({
   },
   actionButtonActive:{
     color:'#70757a',
-  }
+  },
+  paperRead:{
+    opacity:0.4,
+  },
 }));
 
 interface OwnProps{
@@ -144,7 +149,12 @@ const Article = ({
   console.log("Rendering article");
   const classes = useStyles();
   return (
-    <Paper elevation={0} className={classes.root}>
+    <Paper 
+      elevation={0} 
+      className={clsx(classes.root,{
+        [classes.paperRead]:isRead,
+      })}
+    >
       <div>
         <div className={classes.heading}>
           {article.displayTitle || article.title}
@@ -156,7 +166,9 @@ const Article = ({
         )}
         <div className={classes.bottomText}>
           <div className={classes.timeText}>
-            <span>{moment(article.pubDate).fromNow()}  [ {article.sourceDomain} ]</span>
+            {article.pubDate && (
+            <ReactTimeAgo date={new Date(article.pubDate)} locale="en-US" timeStyle="round-minute"/>
+            )}
           </div>
           {(article.tags && article.tags.length)? (
           <div className={classes.tagChips}>
@@ -198,11 +210,20 @@ const Article = ({
               )}
             </IconButton>
           </Tooltip>
-          <Tooltip title="Open Link">
-            <Link classes={{root:classes.actionButton}} className={clsx(classes.actionButtonActive)} href={article.link} target="_blank">
-              <LaunchOutlinedIcon />
-            </Link>
-          </Tooltip>
+          {article.link && (
+            <Tooltip title="Open Link">
+              <Link classes={{root:classes.actionButton}} className={clsx(classes.actionButtonActive)} href={article.link} target="_blank">
+                <LaunchOutlinedIcon />
+              </Link>
+            </Tooltip>
+          )}
+          {article.attachmentLink && (
+            <Tooltip title="Open File">
+              <Link classes={{root:classes.actionButton}} className={clsx(classes.actionButtonActive)} href={article.attachmentLink} target="_blank">
+                <DescriptionOutlinedIcon />
+              </Link>
+            </Tooltip>
+          )}
           </div>
         </div>
       </div>

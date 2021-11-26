@@ -8,6 +8,7 @@ import {TopMenu} from './topMenu';
 import {RightPanel} from "./rightPanel";
 import {LeftPanel} from "./leftPanel";
 import {TagWatch} from 'features/tagwatch';
+import AuthAlert from 'features/auth/authAlert';
 
 import {AuthModal} from 'features/auth';
 
@@ -33,6 +34,7 @@ const ThreeColumnLayout = ({
       </main>
       <RightPanel />
       <AuthModal />
+      <AuthAlert />
     </div>
   );
 };

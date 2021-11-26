@@ -99,6 +99,16 @@ const feedSlice = createSlice({
       state.currentPage = page || 1;
       state.moreToFetch= !!(feedIds.length>=(state.pageSize || initialState.pageSize || 10));
     },
+    retrievedNewFeedList: (state,action: PayloadAction<IFeedListResponse>)=> {
+      const {results:feeds} = action.payload;
+      let feedIds = feeds.map(feed=>feed.id);
+      const existingIds = state.feedIds;
+      feeds.forEach(feed=> {
+        state.loadedFeeds[feed.id] = feed;
+      });
+      feedIds = feedIds.filter((fid)=>(existingIds.indexOf(fid)===-1))
+      state.feedIds = [...feedIds,...existingIds];
+    },
     markedRead: (state,action:PayloadAction<{feedId:string,updateReadLater?:boolean}>)=>{
       const {feedId,updateReadLater=false} = action.payload;
       const feed = state.loadedFeeds[feedId];
@@ -165,6 +175,7 @@ const feedSlice = createSlice({
 export const {
   retrievedFeedList,
   retrievedMoreFeedList,
+  retrievedNewFeedList,
   requestedFeedList,
   requestedMoreFeedList,
   markedRead,

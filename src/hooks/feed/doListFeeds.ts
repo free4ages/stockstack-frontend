@@ -41,6 +41,7 @@ const doListFeeds = (options:IOptions={}): AppThunk => async (dispatch:AppDispat
   const requestedFilter = getState().feeds.requestedFilter;
 
   transformedFilter.limit = state.feeds.pageSize;
+  transformedFilter.paginate = false;
   const response = await feedService.list(transformedFilter);
   if(loadMore){
     dispatch(retrievedMoreFeedList({...response.data,requestedFilter}));

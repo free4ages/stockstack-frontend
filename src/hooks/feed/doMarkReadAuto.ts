@@ -3,6 +3,7 @@ import {markedRead,markedUnRead} from 'slices/feedSlice';
 import feedService from 'services/feed.service';
 import {updateNewCount} from 'slices/tagSlice';
 import {IFeedDocument} from 'services/feed.service';
+import {doShowAuthAlert,checkLogin} from 'hooks/auth';
 
 let _queue:string[] = []; 
 let timeout:any = null;
@@ -30,6 +31,11 @@ const scheduleMarkRead = (feedId:string)=>{
 };
 
 const doMarkReadAuto = (feedId:string): AppThunk => async (dispatch:AppDispatch, getState: ()=>RootState) => {
+  if(!checkLogin(getState())){
+    dispatch(doShowAuthAlert({message:"Please login to mark read"}))
+    return;
+  }
+
   const state = getState();
   const feed = state.feeds.loadedFeeds[feedId];
   dispatch(markedRead({feedId:feedId}))

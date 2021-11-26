@@ -40,7 +40,7 @@ const doListArticles = (options:IOptions={}): AppThunk => async (dispatch:AppDis
   const requestedFilter = getState().articles.requestedFilter;
 
   transformedFilter.limit = state.articles.pageSize;
-  console.log(transformedFilter);
+  transformedFilter.paginate = false;
   const response = await articleService.list(transformedFilter);
   if(loadMore){
     dispatch(retrievedMoreArticleList({...response.data,requestedFilter}));
