@@ -1,4 +1,4 @@
-import React, {useEffect,useRef} from 'react';
+import React, {useState,useEffect,useRef} from 'react';
 import ReactTimeAgo from 'react-time-ago'
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
@@ -20,13 +20,17 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import LaunchOutlinedIcon from '@material-ui/icons/LaunchOutlined';
+
 import truncate from 'utils/truncate';
 
 import {
   doToggleRead,
   doToggleImportant,
-  doToggleReadLater
+  doToggleReadLater,
+  doTogglePin,
 } from 'hooks/feed';
+
+import TopToolBar from './topToolBar';
 
 const useStyles = makeStyles((theme:Theme) => ({
   root: {
@@ -41,6 +45,7 @@ const useStyles = makeStyles((theme:Theme) => ({
     padding:16,
     paddingBottom:10,
     transition: 'background-color 2s',
+    position:'relative',
   },
   heading:{
     whiteSpace:'normal',
@@ -94,6 +99,18 @@ const useStyles = makeStyles((theme:Theme) => ({
       fontSize:15
     }
   },
+  topActionButton:{
+    marginLeft:5,
+    padding:5,
+    fontSize:12,
+    color:'#202124',
+    '&:hover':{
+      backgroundColor:'inherit'
+    },
+    '& .MuiSvgIcon-root':{
+      fontSize:15
+    }
+  },
   actionButtonActive:{
     color:'#70757a',
   },
@@ -102,6 +119,16 @@ const useStyles = makeStyles((theme:Theme) => ({
   },
   paperUnseen:{
     backgroundColor:'#f1f7e6',
+  },
+  feedToolBar:{
+    position:'absolute',
+    right:0,
+    top:0,
+    '& .MuiIconButton-root:hover':{
+      backgroundColor:'inherit'
+    },
+    minWidth:30,
+    height:25
   }
 }));
 
@@ -111,10 +138,16 @@ interface OwnProps{
   seenObserver: any;
 }
 
-const mapState = (state: RootState,ownProps: OwnProps) => ({
-  feed: state.feeds.loadedFeeds[ownProps.feedId],
-  readMode: !!state.feeds.readMode
-});
+const mapState = (state: RootState,ownProps: OwnProps) => {
+  const feed = state.feeds.loadedFeeds[ownProps.feedId];
+  const isPinned = !!(feed.pinTags && feed.pinTags.length && (feed.pinTags.indexOf(state.feeds.filters.tagName || "")!==-1));
+  return {
+    feed,
+    readMode: !!state.feeds.readMode,
+    selectedTag: state.feeds.filters.tagName,
+    isPinned,
+  }
+};
 
 const mapDispatch = (dispatch:AppDispatch) =>({
   toggleRead(feed:IFeedDocument,value:boolean){
@@ -126,6 +159,9 @@ const mapDispatch = (dispatch:AppDispatch) =>({
   toggleReadLater(feed:IFeedDocument,value:boolean){
     dispatch(doToggleReadLater(feed,value));
   },
+  togglePin(feed:IFeedDocument,tagNames:string[],value:boolean){
+    dispatch(doTogglePin(feed,tagNames,value));
+  },
 });
 const connector = connect(mapState, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -136,13 +172,17 @@ const Feed = ({
   toggleRead,
   toggleImportant,
   toggleReadLater,
+  togglePin,
   readObserver,
   seenObserver,
   readMode,
+  selectedTag,
+  isPinned,
 }:Props) => {
   console.log("Rendering feed");
   const classes = useStyles();
   const ref = useRef<HTMLInputElement>(null);
+  const [topToolOpen,setTopToolOpen] = useState<boolean>(false);
 
   useEffect(()=>{
     const observer = readObserver.current;
@@ -170,7 +210,7 @@ const Feed = ({
       data-id={feed.id} 
       elevation={0} 
       className={clsx(classes.root,{
-        [classes.paperRead]:feed.isRead,
+        [classes.paperRead]:(feed.isRead && !isPinned),
         [classes.paperUnseen]:!feed.isSeen
       })}
     >
@@ -244,6 +284,7 @@ const Feed = ({
           )}
           </div>
         </div>
+        <TopToolBar feed={feed} toggleFeedPin={togglePin} selectedTag={selectedTag}/>
       </div>
     </Paper>
   );

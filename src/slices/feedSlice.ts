@@ -23,6 +23,7 @@ export interface IFeedState{
   currentPage ?: number;
   pageSize ?: number;
   readMode : boolean;
+  pinnedSize : number;
 }
 
 type IFeedListPayload = IFeedListResponse & {requestedFilter:string,updatedFilter?:IFeedFilter}
@@ -46,6 +47,7 @@ const initialState: IFeedState = {
   pageSize:10,
   currentPage: 1,
   readMode: false,
+  pinnedSize:0,
 };
 
 
@@ -58,6 +60,9 @@ const feedSlice = createSlice({
     },
     requestedMoreFeedList: (state,action:PayloadAction<IFeedListParams>) => {
       return {...state,moreLoading:true,loading:true,requestedFilter:JSON.stringify(action.payload)};
+    },
+    requestedPinnedFeedList: (state) => {
+      state.pinnedSize = 0;
     },
     retrievedFeedList: (state,action:PayloadAction<IFeedListPayload>)=>{
       const {results:feeds,page=1,requestedFilter,updatedFilter={}} = action.payload;
@@ -103,10 +108,23 @@ const feedSlice = createSlice({
       const {results:feeds} = action.payload;
       let feedIds = feeds.map(feed=>feed.id);
       const existingIds = state.feedIds;
+      const pinnedIds = state.feedIds.slice(0,state.pinnedSize);
+      const restIds = state.feedIds.slice(state.pinnedSize);
       feeds.forEach(feed=> {
         state.loadedFeeds[feed.id] = feed;
       });
       feedIds = feedIds.filter((fid)=>(existingIds.indexOf(fid)===-1))
+      state.feedIds = [...pinnedIds,...feedIds,...restIds];
+    },
+    retrievedPinnedFeedList: (state,action: PayloadAction<IFeedListResponse & {requestedTagName:string}>) => {
+      const {results:feeds,requestedTagName} = action.payload;
+      if(state.filters.tagName!==requestedTagName) return
+      let feedIds = feeds.map(feed=>feed.id);
+      let existingIds = state.feedIds;
+      feeds.forEach(feed=> {
+        state.loadedFeeds[feed.id] = feed;
+      });
+      existingIds = existingIds.filter((fid)=>(feedIds.indexOf(fid)===-1))
       state.feedIds = [...feedIds,...existingIds];
     },
     markedRead: (state,action:PayloadAction<{feedId:string,updateReadLater?:boolean}>)=>{
@@ -144,6 +162,22 @@ const feedSlice = createSlice({
         state.loadedFeeds[feedId] = {...feed,important:false,isSeen:true};
       }
     },
+    markedPin: (state,action:PayloadAction<{feedId:string,tagNames:string[]}>)=>{
+      const {feedId,tagNames} = action.payload;
+      const feed = state.loadedFeeds[feedId];
+      if(feed){
+        const pinTags = [...(feed.pinTags || []),...tagNames]
+        state.loadedFeeds[feedId] = {...feed,pinTags};
+      }
+    },
+    markedUnPin: (state,action:PayloadAction<{feedId:string,tagNames:string[]}>)=>{
+      const {feedId,tagNames} = action.payload;
+      const feed = state.loadedFeeds[feedId];
+      if(feed){
+        const pinTags = (feed.pinTags || []).filter((tagName)=>(tagNames.indexOf(tagName)===-1))
+        state.loadedFeeds[feedId] = {...feed,pinTags};
+      }
+    },
     markedReadLater: (state,action:PayloadAction<{feedId:string,updateRead?:boolean}>)=>{
       const {feedId,updateRead=true} = action.payload;
       const feed = state.loadedFeeds[feedId];
@@ -176,13 +210,17 @@ export const {
   retrievedFeedList,
   retrievedMoreFeedList,
   retrievedNewFeedList,
+  retrievedPinnedFeedList,
   requestedFeedList,
   requestedMoreFeedList,
+  requestedPinnedFeedList,
   markedRead,
   markedSeen,
   markedUnRead,
   markedImportant,
   markedUnImportant,
+  markedPin,
+  markedUnPin,
   markedReadLater,
   removedReadLater,
   changedFilter,

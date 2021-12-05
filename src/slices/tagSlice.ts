@@ -15,6 +15,7 @@ export interface ITagState{
 export interface ITagCount{
   name: string;
   count: number;
+  latestDate: string;
 }
 
 const initialState: ITagState = {
@@ -53,10 +54,19 @@ const tagSlice = createSlice({
     retrievedFeedTagCounts: (state,action:PayloadAction<ITagCount[]>) => {
       const data = action.payload; 
       const counts:{[key:string]:number}={};
+      const lastUpdates:{[key:string]:string} ={};
       data.forEach((c) => {
         counts[c.name] = c.count;
+        lastUpdates[c.name] = c.latestDate;
       });
       state.newCounts = counts;
+      let tag;
+      for(let key in state.loadedTags){
+        tag = state.loadedTags[key]; 
+        if(tag && lastUpdates[tag.name] && lastUpdates[tag.name]!==tag.lastUpdated){
+          state.loadedTags[key]={...tag,lastUpdated:lastUpdates[tag.name]};
+        }
+      }
     },
     arrangedSubscribedTags: (state,action:PayloadAction<string[]>) => {
       state.subscribedIds = action.payload;

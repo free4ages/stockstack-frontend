@@ -17,5 +17,6 @@ const onFetchFeedTagUpdate = (data:ITagUpdate):AppThunk => (dispatch:AppDispatch
   dispatch(doArrangeTag());
   dispatch(doFetchArticleFeed({articleId,tags:[tagName]}));
 };
+
 export default onFetchFeedTagUpdate;
 

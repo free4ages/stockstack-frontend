@@ -18,7 +18,7 @@ const mapDispatch = (dispatch:AppDispatch) => ({
     dispatch(doListFeeds())
   },
   loadMoreFeeds(){
-    dispatch(doListFeeds({loadMore:true}));
+    dispatch(doListFeeds({loadMore:true,fetchPinned:false}));
   },
   autoMarkRead(feedId:string){
     dispatch(doMarkReadAuto(feedId));
