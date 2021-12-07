@@ -27,7 +27,7 @@ import {
   doToggleRead,
   doToggleImportant,
   doToggleReadLater,
-  doTogglePin,
+  doChangePinStatus,
 } from 'hooks/feed';
 
 import TopToolBar from './topToolBar';
@@ -159,8 +159,8 @@ const mapDispatch = (dispatch:AppDispatch) =>({
   toggleReadLater(feed:IFeedDocument,value:boolean){
     dispatch(doToggleReadLater(feed,value));
   },
-  togglePin(feed:IFeedDocument,tagNames:string[],value:boolean){
-    dispatch(doTogglePin(feed,tagNames,value));
+  changePinStatus(feed:IFeedDocument,addTagNames:string[]|null,removeTagNames:string[]|null){
+    dispatch(doChangePinStatus(feed,addTagNames,removeTagNames));
   },
 });
 const connector = connect(mapState, mapDispatch);
@@ -172,7 +172,7 @@ const Feed = ({
   toggleRead,
   toggleImportant,
   toggleReadLater,
-  togglePin,
+  changePinStatus,
   readObserver,
   seenObserver,
   readMode,
@@ -284,7 +284,7 @@ const Feed = ({
           )}
           </div>
         </div>
-        <TopToolBar feed={feed} toggleFeedPin={togglePin} selectedTag={selectedTag}/>
+        <TopToolBar feed={feed} changeFeedPin={changePinStatus} selectedTag={selectedTag}/>
       </div>
     </Paper>
   );

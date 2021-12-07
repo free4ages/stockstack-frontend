@@ -8,8 +8,8 @@ export interface IMarkParams{
 
 export interface IMarkPinParams{
   userFeedId?: string;
-  tagNames?: string[];
-  value: boolean;
+  addTagNames?: string[];
+  removeTagNames?: string[];
 };
 
 export interface IArticleInfo{

@@ -4,12 +4,13 @@ import doListTagFeeds from './doListTagFeeds';
 import doToggleRead from './doToggleRead';
 import doToggleImportant from './doToggleImportant';
 import doToggleReadLater from './doToggleReadLater';
-import doTogglePin from './doTogglePin';
+import doChangePinStatus from './doChangePinStatus';
 import doMarkReadAuto from './doMarkReadAuto';
 import doMarkSeenAuto from './doMarkSeenAuto';
 import doMarkReadAll from './doMarkReadAll';
 import doFetchArticleFeed from './doFetchArticleFeed';
 import doListPinnedFeeds from './doListPinnedFeeds';
+import onFetchFeedUpdate from './onFetchFeedUpdate';
 
 export {
   doListFeeds,
@@ -18,10 +19,11 @@ export {
   doToggleRead,
   doToggleImportant,
   doToggleReadLater,
-  doTogglePin,
+  doChangePinStatus,
   doListTagFeeds,
   doListPinnedFeeds,
   doMarkReadAuto,
   doMarkSeenAuto,
   doMarkReadAll,
+  onFetchFeedUpdate,
 };

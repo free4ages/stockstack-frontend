@@ -3,12 +3,15 @@ import { FixedSizeList } from "react-window";
 import { ConnectedProps,connect } from 'react-redux'
 import {RootState,AppDispatch} from 'app/store';
 import SubscribedTagRow from './subscribedTagRow';
-import {doListSubscribedTags} from 'hooks/tag';
 import {WebSocketContext} from 'components/webSocketProvider';
 import {
   onFetchFeedTagUpdate,
   doSubscribeAllTags,
+  doListSubscribedTags,
 } from 'hooks/tag';
+import {
+  onFetchFeedUpdate
+} from 'hooks/feed';
 
 interface OwnProps{
   show: boolean;
@@ -27,7 +30,7 @@ const mapDispatch = (dispatch:AppDispatch) => ({
   },
   receivedUpdate(data:any){
     console.log(`Received update for ${data.tagName}`,data);
-    dispatch(onFetchFeedTagUpdate(data));
+    dispatch(onFetchFeedUpdate(data));
   }
 });
 

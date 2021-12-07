@@ -4,15 +4,44 @@ import {RootState,AppDispatch} from 'app/store';
 import {IFeedDocument} from 'services/feed.service';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Popover from '@material-ui/core/Popover';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Typography from '@material-ui/core/Typography';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import SendIcon from '@material-ui/icons/Send';
+import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 
 
 import ColorizeIcon from '@material-ui/icons/Colorize';
 import CreateIcon from '@material-ui/icons/Create';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 const useStyles = makeStyles((theme:Theme) => ({
+  paperRoot:{
+    padding:10,
+    '& .MuiListItem-root':{
+      padding:0,
+    },
+    '& .MuiListItemIcon-root':{
+      padding:2,
+      minWidth: 30
+    },
+    '& .donecon':{
+      width:'100%',
+      textAlign:'center',
+      '& button':{
+        backgroundColor:'#91dcdf'
+      }
+    }
+  },
   topActionButton:{
     marginLeft:5,
     padding:5,
@@ -39,23 +68,30 @@ const useStyles = makeStyles((theme:Theme) => ({
 
 interface OwnProps{
   feed: IFeedDocument;
-  toggleFeedPin: any;
+  changeFeedPin: any;
   selectedTag: string | null | undefined;
 }
 const TopToolBar = ({
   feed,
-  toggleFeedPin,
+  changeFeedPin,
   selectedTag
 }:OwnProps) => {
   const classes = useStyles();
   const [topToolOpen,setTopToolOpen] = useState<boolean>(false);
   const [anchorEl,setAnchorEl] = useState(null);
-  const isPinned=!!(feed.pinTags && feed.pinTags.length && (feed.pinTags.indexOf(selectedTag || "")!==-1));
+  const [pinnedTags,setPinnedTags] = useState(feed.pinTags || []);
+  const isPinned=selectedTag?(!!(feed.pinTags && feed.pinTags.length && (feed.pinTags.indexOf(selectedTag || "")!==-1))):!!(feed.pinTags && feed.pinTags.length);
 
   const handlePinClick = (e:any) =>{
     if(isPinned){
-      if(feed.pinTags){
-        toggleFeedPin(feed,feed.pinTags,false);
+      if(selectedTag && feed.pinTags && feed.pinTags.length && feed.pinTags.indexOf(selectedTag)!==-1){
+        changeFeedPin(feed,null,[selectedTag]);
+      }
+      else if(feed.pinTags && feed.tags && feed.tags.length===1 && feed.pinTags.length==1 && feed.pinTags[0]===feed.tags[0]){
+        changeFeedPin(feed,null,feed.pinTags);
+      }
+      else if(feed.tags && feed.tags.length){
+        setAnchorEl(e.currentTarget);
       }
     }else if(!selectedTag){
       if(feed.tags && feed.tags.length){
@@ -63,16 +99,37 @@ const TopToolBar = ({
           setAnchorEl(e.currentTarget);
         }
         else{
-          toggleFeedPin(feed,feed.tags,true);
+          changeFeedPin(feed,feed.tags,null);
         }
       }
     }else{
-      toggleFeedPin(feed,[selectedTag],true);
+      changeFeedPin(feed,[selectedTag],null);
     }
+  }
+
+  const handlePinSubmit = () => {
+    const addedTags = pinnedTags.filter(tagName=>((feed.pinTags || []).indexOf(tagName)===-1));
+    const removedTags = (feed.pinTags || []).filter(tagName => (pinnedTags.indexOf(tagName)===-1));
+    if(addedTags.length || removedTags.length){
+      changeFeedPin(feed,addedTags,removedTags);
+    }
+    setAnchorEl(null);
+    setTopToolOpen(false);
   }
 
   const handleClose = () =>{
     setAnchorEl(null);
+    setTopToolOpen(false);
+  }
+
+  const toggleTag = (tag:string) => {
+    const index = pinnedTags.indexOf(tag);
+    if(index===-1){
+      setPinnedTags([...pinnedTags,tag]);
+    }
+    else{
+      setPinnedTags([...(pinnedTags.slice(0,index)),...(pinnedTags.slice(index+1))])
+    }
   }
   return (
     <div
@@ -91,7 +148,7 @@ const TopToolBar = ({
         </IconButton>
       </Tooltip>
       )}
-      {anchorEl && (
+      {(anchorEl && feed.tags && feed.tags.length) && (
       <Popover
         id={feed.id}
         open={!!anchorEl}
@@ -100,7 +157,26 @@ const TopToolBar = ({
         anchorOrigin={{vertical:"bottom",horizontal:"left"}}
         transformOrigin={{vertical:"top",horizontal:"right"}}
       >
-        Test Content
+        <Paper classes={{root:classes.paperRoot}}>
+          <Typography variant="subtitle2">Select Tags</Typography>
+          <MenuList disablePadding>
+            {feed.tags.map((tag)=>(
+              <MenuItem key={tag} onClick={()=>toggleTag(tag)}>
+                <ListItemIcon>
+                  {(pinnedTags.indexOf(tag)===-1)?(
+                    <RadioButtonUncheckedIcon />
+                  ):(
+                    <CheckCircleOutlineIcon />
+                  )}
+                </ListItemIcon>
+                <Typography variant="inherit">{tag}</Typography>
+              </MenuItem>
+            ))}
+          </MenuList>
+          <div className="donecon">
+            <Button size="small" onClick={handlePinSubmit}>Done</Button>
+          </div>
+        </Paper>
       </Popover>
       )}
     </div>
