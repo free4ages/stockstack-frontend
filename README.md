@@ -1,46 +1,163 @@
-# Getting Started with Create React App
+# StockHeap - News Aggregator for Financial Markets
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![StockHeap Application](./stockstack.jpeg)
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+StockHeap is a modern, real-time news aggregator application designed specifically for tracking financial markets and company-specific news. Built with React and TypeScript, it provides users with a clean, intuitive interface to monitor news feeds related to various companies, sectors, and financial topics.
 
-### `yarn start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 🎯 **Real-time News Aggregation**
+- Live news feeds from multiple sources
+- Real-time updates with WebSocket integration
+- Timestamp tracking for all articles
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 📊 **Topic-based Organization**
+- Company-specific news tracking (TCS, BEL, RELIANCE, etc.)
+- Sector-based categorization (OIL, BANK, GLOBAL)
+- Custom topic subscriptions
 
-### `yarn test`
+### 🔍 **Advanced Search & Filtering**
+- Search across articles and topics
+- Filter by company, sector, or keywords
+- Tag-based article organization
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 📱 **Modern UI/UX**
+- Clean, responsive three-column layout
+- Material-UI components for consistent design
+- Intuitive navigation with left sidebar
+- Real-time notification badges
 
-### `yarn build`
+### ⭐ **User Experience Features**
+- Bookmark important articles
+- Mark articles as read/unread
+- Star favorite articles
+- Read later functionality
+- Auto-refresh capabilities
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Technology Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Frontend**: React 17, TypeScript
+- **State Management**: Redux Toolkit
+- **UI Framework**: Material-UI
+- **Routing**: React Router DOM
+- **Real-time**: Socket.io Client
+- **HTTP Client**: Axios
+- **Build Tool**: Create React App
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Project Structure
 
-### `yarn eject`
+```
+src/
+├── app/                    # Redux store and app configuration
+├── components/             # Reusable UI components
+├── features/              # Feature-based modules
+│   ├── articlelist/       # Article listing functionality
+│   ├── auth/             # Authentication components
+│   ├── feedlist/         # Feed management
+│   ├── layouts/          # Layout components
+│   └── tagwatch/         # Tag monitoring
+├── hooks/                 # Custom React hooks
+├── services/              # API services
+├── slices/               # Redux slices
+└── utils/                # Utility functions
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Getting Started
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Prerequisites
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Node.js (v14 or higher)
+- Yarn package manager
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Installation
 
-## Learn More
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd stockstack-frontend
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. **Install dependencies**
+   ```bash
+   yarn install
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. **Start the development server**
+   ```bash
+   yarn start
+   ```
+
+   The application will be available at [http://localhost:3002](http://localhost:3002)
+
+### Available Scripts
+
+- `yarn start` - Runs the app in development mode
+- `yarn build` - Builds the app for production
+- `yarn test` - Launches the test runner
+- `yarn eject` - Ejects from Create React App (one-way operation)
+
+## Key Features Explained
+
+### Three-Column Layout
+The application uses a sophisticated three-column layout:
+- **Left Panel**: Topic navigation with real-time counters
+- **Center Panel**: Main content area for articles/feeds
+- **Right Panel**: Additional tools and filters
+
+### Real-time Updates
+- WebSocket integration for live news updates
+- Automatic refresh of article counts
+- Real-time notification badges
+
+### Authentication
+- Protected routes for authenticated users
+- Login/signup functionality
+- User-specific feed management
+
+## Configuration
+
+The application supports multiple environment configurations:
+- `src/config/local.ts` - Local development settings
+- `src/config/production.ts` - Production settings
+
+## Deployment
+
+### Docker Deployment
+The project includes Docker configuration for easy deployment:
+
+```bash
+# Build the Docker image
+docker build -t stockheap-frontend .
+
+# Run the container
+docker run -p 3002:3002 stockheap-frontend
+```
+
+### Docker Compose
+For complete stack deployment:
+
+```bash
+docker-compose up -d
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For support and questions, please open an issue in the repository or contact the development team.
+
+---
+
+**StockHeap** - Your gateway to real-time financial news and market insights. 
